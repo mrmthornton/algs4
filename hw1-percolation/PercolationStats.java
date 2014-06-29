@@ -103,7 +103,9 @@ public class PercolationStats {
     /**
      * @return the lower bound of the confidence interval
      */
-    public double confidenceLo() {
+    public double confidenceLo() { 
+        // using mean() rather than mu, and stddev() rather than sigma
+        // ensures the current correct values are used.
         double ciLo = mean() - (CIB * stddev() /  Math.sqrt(T));
         return ciLo;
     }
