@@ -18,6 +18,7 @@ public class TestDeque {
         dek.addFirst("one");
         dek.addFirst("two");
         dek.addFirst("three");
+        System.out.println("size() returns " + dek.size());
         dek.removeFirst();
         dek.removeFirst();
         dek.removeFirst();

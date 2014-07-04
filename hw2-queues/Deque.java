@@ -4,31 +4,51 @@ import java.util.NoSuchElementException;
 import java.util.Iterator;
 
 /**
- *  Implements a double ended queue using linked lists.
+ *  Implements a double ended queue an array.
  * @author Michael Thornton
  *
- * @param <Item>
+ * @param <Item> A place holder the clients type or object being stored.
  */
 public class Deque<Item> implements Iterable<Item> {
+
     /**
-     * front is the first node in the linked list
-     * if the deque is empty, front is null valued.
-     * if there is only one node, front and back are the same.
+     * arr is the array holding queued items.
+     * arr is sized in the constructor.
      */
-    private Node front;
+    private Item[] arr;
+
     /**
-     * back is the last node in the linked list.
-     * if the deque is empty, back is null valued.
-     * if there is only one node, front and back are the same.
+     * front is the index of the first item in the queue
      */
-    private Node back;
+    private int front;
+
+    /**
+     * back is the index of the last item in the queue
+     */
+    private int back;
+
+    /**
+     * capacity is the size of the array
+     * this is a dynamic value since the array
+     * can resize on demand
+     */
+    private int capacity;
+
+    /**
+     * queueLength is the number of items on the deque.
+     */
+    private int queueLength;
 
     /**
      * Construct an empty deque.
      */
+    @SuppressWarnings("unchecked")
     public Deque() {
-        front = null;
-        back = null;
+        int startingSize = 8;
+        arr = (Item[]) new Object[startingSize];
+        front = arr.length / 2;
+        back = arr.length / 2;
+        queueLength = 0;
     }
 
     /**
@@ -36,7 +56,7 @@ public class Deque<Item> implements Iterable<Item> {
      * @return true if empty
      */
     public boolean isEmpty() {
-        if (front == null) {
+        if (queueLength == 0) {
             return true;
         }
         return false;
@@ -45,17 +65,8 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * @return the number of items on the deque.
      */
-    @SuppressWarnings("unused")
     public int size() {
-        if (isEmpty()) {
-            return 0;
-        } else {
-            int count = 0;
-            for (Item i : this) {
-                count++;
-            }
-            return count;
-        }
+        return queueLength;
     }
 
     /**
@@ -67,16 +78,11 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "'null value' argument in addFirst.";
             throw new NullPointerException(msg);
         }
-        Node oldFront = front;
-        front = new Node();
-        front.nodeItem = item;
-        front.nextNodeBack = oldFront;
-        if (oldFront != null) { // if the deque was NOT empty
-            oldFront.nextNodeFront = front;
+        if (front == 0) {
+            resizeAndCenter();
         }
-        if (oldFront == null) { // if the deque WAS empty
-            back = front;
-        }
+         arr[--front] = item;
+         queueLength++;
     }
 
     /**
@@ -88,17 +94,12 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "'null value' argument in addLast.";
             throw new NullPointerException(msg);
         }
-        Node oldBack = back;
-        back = new Node();
-        back.nodeItem = item;
-        back.nextNodeFront = oldBack;
-        if (oldBack != null) { // if the deque was NOT empty.
-            oldBack.nextNodeBack = back;
+        if (back >= arr.length - 1) {
+            resizeAndCenter();
         }
-        if (oldBack == null) { // if the deque WAS empty
-            front = back;
-        }
-    }
+        arr[++back] = item;
+        queueLength++;
+     }
 
     /**
      * delete and return the item at the front.
@@ -109,15 +110,9 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeFirst() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = front.nodeItem;
-        // if this node IS the only one in the queue
-        if (front.nextNodeBack == null && front.nextNodeFront == null) {
-            front = null;
-            back = null;
-        } else {
-            front.nextNodeBack.nextNodeFront = null;
-            front = front.nextNodeBack;
-        }
+        Item item = arr[front++];
+        queueLength--;
+        checkForOneQuarterCapacity();
         return item;
     }
 
@@ -130,15 +125,9 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeLast() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = back.nodeItem;
-     // if this node IS the only one in the queue
-        if (front.nextNodeBack == null && front.nextNodeFront == null) {
-                back = null;
-                front = null;
-        } else {
-            back.nextNodeFront.nextNodeBack = null;
-            back = back.nextNodeFront;
-        }
+        Item item = arr[back--];
+        queueLength--;
+        checkForOneQuarterCapacity();
         return item;
     }
 
@@ -153,7 +142,17 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Helper methods.
      */
-
+    private void checkForOneQuarterCapacity() {
+        if ( queueLength <= capacity / 4) {
+            resizeAndCenter();
+        }
+    }
+    private void resizeAndCenter() {
+        //shrink
+        //grow
+        // copy old queue to center of new queue
+        // reassign pointer
+    }
 
     /**
      *  Inner classes.
@@ -173,18 +172,18 @@ public class Deque<Item> implements Iterable<Item> {
         /**
          * Reference to the previous node.
          */
-        private Node nextNodeFront;
+        //private Node nextNodeFront;
         /**
          * Reference to the next node.
          */
-        private Node nextNodeBack;
+        //private Node nextNodeBack;
         /**
          * Sets all three fields to null value.
          */
         private Node() {
             nodeItem = null;
-            nextNodeFront = null;
-            nextNodeBack = null;
+            //nextNodeFront = null;
+            //nextNodeBack = null;
         }
     };
 
@@ -196,13 +195,13 @@ public class Deque<Item> implements Iterable<Item> {
         /**
          * create a local copy of the first node in the linked list.
          */
-        private Node current = front;
+        //private Node current = front;
 
         /**
          * @return true if the iteration has more elements.
          */
         public boolean hasNext() {
-            return current != null;
+            return  false;
         }
 
         /**
@@ -217,13 +216,12 @@ public class Deque<Item> implements Iterable<Item> {
          *@return Returns the next element in the iteration.
          */
         public Item next() {
-            Item item = current.nodeItem;
+            Item item = arr[0];
             //TODO
-            if (item == null || current == null) { //did this fix the error?
+            if ( false) {
                 String msg = "";
                 throw new NoSuchElementException(msg);
             }
-            current = current.nextNodeBack;
             return item;
         }
     };
