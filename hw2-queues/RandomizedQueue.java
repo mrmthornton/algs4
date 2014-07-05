@@ -17,7 +17,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * The last node.
      */
-    @SuppressWarnings("unused")
     private Node tail;
 
     /**
@@ -200,7 +199,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
          * create a local copy of the first node in the linked list.
          */
         //private Deque<Item> locQ = new Deque<Item>();
-        @SuppressWarnings("unchecked")
         private Item[] rA =  (Item[]) new Object[count];
         private int index;
 
@@ -254,7 +252,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * Contains the methods needed for the Iterable interface.
      */
-    @SuppressWarnings("unused")
     private class ListIterator implements Iterator<Item> {
         /**
          * create a local copy of the first node in the linked list.

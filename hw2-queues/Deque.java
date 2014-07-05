@@ -1,5 +1,5 @@
-import java.lang.NullPointerException;
-import java.lang.UnsupportedOperationException;
+//import java.lang.NullPointerException;
+//import java.lang.UnsupportedOperationException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
 
@@ -12,25 +12,35 @@ import java.util.Iterator;
 public class Deque<Item> implements Iterable<Item> {
 
     /**
+     * the initial and the smallest array size.
+     */
+    private static final int START_SIZE = 8;
+
+    /**
+     * Reduce the queue by this factor.
+     * It is not equal to 2, in order to avoid thrashing
+     */
+    private static final int SHRINK_FACTOR = 4;
+
+    /**
      * arr is the array holding queued items.
      * arr is sized in the constructor.
      */
     private Item[] arr;
 
     /**
-     * front is the index of the first item in the queue
+     * front is the index of the first item in the queue.
      */
     private int front;
 
     /**
-     * back is the index of the last item in the queue
+     * back is the index of the last item in the queue.
      */
     private int back;
 
     /**
-     * capacity is the size of the array
-     * this is a dynamic value since the array
-     * can resize on demand
+     * Capacity is the size of the array.
+     * This is a dynamic value since the array can be resized on demand.
      */
     private int capacity;
 
@@ -42,12 +52,13 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-    @SuppressWarnings("unchecked")
     public Deque() {
-        int startingSize = 8;
-        arr = (Item[]) new Object[startingSize];
-        front = arr.length / 2;
-        back = arr.length / 2;
+        arr = (Item[]) new Object[START_SIZE];
+        capacity = START_SIZE;
+        // with one element in the queue front=back
+        // with an empty queue front>back
+        front = capacity / 2 + 1;
+        back = capacity / 2;
         queueLength = 0;
     }
 
@@ -79,10 +90,10 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NullPointerException(msg);
         }
         if (front == 0) {
-            resizeAndCenter();
+            resizeOrCenter();
         }
-         arr[--front] = item;
-         queueLength++;
+        arr[--front] = item;
+        queueLength++;
     }
 
     /**
@@ -94,12 +105,12 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "'null value' argument in addLast.";
             throw new NullPointerException(msg);
         }
-        if (back >= arr.length - 1) {
-            resizeAndCenter();
+        if (back == capacity - 1) {
+            resizeOrCenter();
         }
         arr[++back] = item;
         queueLength++;
-     }
+    }
 
     /**
      * delete and return the item at the front.
@@ -110,9 +121,11 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeFirst() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = arr[front++];
+        Item item = arr[front];
+        arr[front] =  null; // free the memory for removed item
+        front++;
         queueLength--;
-        checkForOneQuarterCapacity();
+        checkForShrinkSize();
         return item;
     }
 
@@ -125,82 +138,115 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeLast() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = arr[back--];
+        Item item = arr[back];
+        arr[back] = null; // free the memory for removed item
+        back--;
         queueLength--;
-        checkForOneQuarterCapacity();
+        checkForShrinkSize();
         return item;
     }
 
     /**
      * return an iterator over items in order from front to back.
+     * @return ArrayIterator() the iterator method.
      */
     public Iterator<Item> iterator() {
-        return new ListIterator();
+        return new ArrayIterator();
     }
-
 
     /**
-     * Helper methods.
+     * HELPER METHODS.
      */
-    private void checkForOneQuarterCapacity() {
-        if ( queueLength <= capacity / 4) {
-            resizeAndCenter();
+
+    /**
+     * Determine if the queue meets the shrink criteria.
+     * only after removing an item.
+     */
+    private void checkForShrinkSize() {
+        if (isShrinkSize()) {
+            shrinkAndCenter();
         }
     }
-    private void resizeAndCenter() {
-        //shrink
-        //grow
-        // copy old queue to center of new queue
+    /**
+     * resizeOrCenter() is used when either the first or the last  array
+     * element is used. The size of the queue is NOT the trigger, so it
+     * checks the need for shrinking or growing or simply re-centering.
+     */
+    private void resizeOrCenter() {
+        if (isShrinkSize()) {
+            shrinkAndCenter();
+        } else if (queueLength > capacity / 2) {
+            growAndCenter();
+        } else {
+            center(capacity);
+        }
+    }
+
+    /**
+     *  Reduce the capacity and call the center method.
+     */
+    private void shrinkAndCenter() {
+        center(capacity / 2);
+    }
+
+    /**
+     *  Increase the capacity and call the center method.
+     */
+    private void growAndCenter() {
+        center(capacity * 2);
+    }
+
+    /**
+     * Creates a new array of size indicated by the argument.
+     * Copies and centers the existing queue in the new array.
+     * Changes variables and pointers to appropriate new values.
+     * @param newArraySize is the capacity of the new array.
+     */
+    private void center(final int newArraySize) {
+        Item[] newArray = (Item[]) new Object[newArraySize];
+        int  newFront = (newArraySize / 2) - (queueLength / 2);
+        for (int i = 0; i < queueLength; i++) {
+            newArray[newFront + i]  = arr[front + i];
+        }
+        front = newFront;
+        back = newFront + queueLength - 1;
         // reassign pointer
+        arr = newArray;
+        capacity = newArraySize;
     }
 
     /**
-     *  Inner classes.
+     * @return true if the array and queue meet the shrink criteria.
      */
-
-
-    /**
-     * This Node class has two pointers, a forward pointer
-     *  and a backward pointer, allowing the linked list to
-     *  be used in a deque data structure.
-     */
-    private final class Node {
-        /**
-         * Reference to an instance of type'Item'.
-         */
-        private Item nodeItem;
-        /**
-         * Reference to the previous node.
-         */
-        //private Node nextNodeFront;
-        /**
-         * Reference to the next node.
-         */
-        //private Node nextNodeBack;
-        /**
-         * Sets all three fields to null value.
-         */
-        private Node() {
-            nodeItem = null;
-            //nextNodeFront = null;
-            //nextNodeBack = null;
+    private boolean isShrinkSize() {
+        if ((queueLength > START_SIZE)
+                && (queueLength <= capacity / SHRINK_FACTOR)) {
+            return true;
         }
-    };
+        return false;
+    }
 
     /**
-     * An inner class.
-     * contains the methods needed for the Iterable interface.
+     *  INNER CLASSES.
      */
-    private class ListIterator implements Iterator<Item> {
+
+    /**
+     * An inner class with methods for the Iterable interface.
+     */
+    private class ArrayIterator implements Iterator<Item> {
+
         /**
-         * create a local copy of the first node in the linked list.
+         * create an index for the iterator.
          */
-        //private Node current = front;
+        private int index = front;
 
         /**
          * @return true if the iteration has more elements.
          */
         public boolean hasNext() {
+            if (queueLength > 0 && index <= back) {
+                return true;
+            }
             return  false;
         }
 
@@ -216,12 +262,13 @@ public class Deque<Item> implements Iterable<Item> {
          *@return Returns the next element in the iteration.
          */
         public Item next() {
-            Item item = arr[0];
-            //TODO
-            if ( false) {
-                String msg = "";
+            Item item = arr[index];
+            if (item == null) {
+                String msg = "array[" + String.valueOf(index)
+                        + "] does not exist.";
                 throw new NoSuchElementException(msg);
             }
+            index++;
             return item;
         }
     };
