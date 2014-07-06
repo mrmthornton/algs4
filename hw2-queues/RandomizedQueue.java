@@ -47,7 +47,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private int capacity;
 
     /**
-     * queueLength is the number of items on the deque.
+     * queueLength is the number of items on the queue.
      */
     private int queueLength;
 
@@ -82,8 +82,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return queueLength;
     }
 
-
-
     /**
      *  insert the item at the end.
      * @param item
@@ -110,9 +108,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             String msg = "in dequeue method, accessing empty queue !";
             throw new NoSuchElementException(msg);
         }
+        //StdRandom.setSeed(1);
         int index = front + StdRandom.uniform(queueLength);
         Item item = arr[index];
-        shift(index);
+        shift(index); // removes element and adjusts variables
         checkForShrinkSize();
         return item;
     }
@@ -210,6 +209,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         // if the queue only had one element,
         // it was removed, so don't shift anything
         if (queueLength == 1) {
+            arr[index] = null;
+            front = capacity / 2 + 1;
+            back = capacity / 2;
             queueLength = 0;
             return;
         }
@@ -290,6 +292,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
          *@return Returns the next element in the iteration.
          */
         public Item next() {
+            if (!hasNext()) {
+                String msg = "No next() element";
+                throw new NoSuchElementException(msg);
+            }
             Item item = arr[front + randomIndex[localIndex]];
             if (item == null) {
                 String msg = "array[" + String.valueOf(randomIndex[localIndex])
