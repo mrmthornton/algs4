@@ -1,6 +1,4 @@
 
-
-
 /**
  * Test class RandomizedQueue.
  * @author mike
@@ -23,10 +21,9 @@ public final class TestRandQueue {
 
         System.out.println("size() returns " + rDek.size());
 
-        //rDek.addFirst(null);  // test exception in addFirst method.
-        //rDek.addLast(null);  // test exception in addLast method.
-        //rDek.iterator().remove();  // test exception in iterator remove() method.
-        //rDek.iterator().next();  // test exception in iterator next() method. 
+//        rDek.enqueue(null);  // test exception in enqueue method.
+//        rDek.iterator().remove();  // test exception in iterator remove() method.
+//        rDek.iterator().next();  // test exception in iterator next() method. 
 
         rDek.enqueue("\t(tabs)\t");
         rDek.enqueue("I");
@@ -61,11 +58,13 @@ public final class TestRandQueue {
         rDek.enqueue("four");
         rDek.enqueue("five");
 
-        // sample N+1
-        for (int i = 0; i < 6; i++) {
-            System.out.print(rDek.sample() + " ");
+        // testing sample of empty queue
+        // uncomment next line for testing
+        //for (int i = 0; i < 6; i++)
+        {
+            System.out.print ("testing sample() exception ");
+            System.out.println(rDek.sample() + " ");
         }
-        System.out.println();
 
         System.out.println("size() returns " + rDek.size());
 
@@ -73,6 +72,21 @@ public final class TestRandQueue {
         for (String s : rDek) {
             System.out.print(s + " ");
         }
+        // starting clean with new  Randomized Queue
+        RandomizedQueue<String> rDek2 = new  RandomizedQueue<String>();
+        for (int i = 0; i<500; i++) {
+            rDek2.enqueue("A");
+        }
+        for (int i = 0; i<500; i++) {
+            rDek2.sample();
+        }
+        for (int i = 0; i<500; i++) {
+            rDek2.dequeue();
+        }
         System.out.println();
+        System.out.println("this should fail");
+        rDek2.sample();
+        System.out.println("size() returns " + rDek2.size());
+
     }
 }
