@@ -6,8 +6,16 @@ public class TestDeque {
 
         System.out.println("size() returns " + dek.size());
 
-        //dek.addFirst(null);  // test exception in addFirst method.
-        //dek.addLast(null);  // test exception in addLast method.
+        try {
+            dek.addFirst(null);  // test exception in addFirst method.
+        }catch(NullPointerException e) {
+            System.out.println("Passed");
+        }
+        try {
+            dek.addLast(null);  // test exception in addLast method.
+        }catch(NullPointerException e) {
+            System.out.println("Passed");
+        }
         //dek.iterator().remove(); // test exception in iterator remove method.
 
         // add N items, remove N+1 expecting exception
