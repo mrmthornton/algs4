@@ -1,6 +1,5 @@
 package test;
 
-import hw3.Point;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
 
