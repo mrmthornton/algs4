@@ -1,8 +1,4 @@
 
-
-
-
-
 public class TestDeque {
 
     public static void main(String[] args) {
@@ -10,14 +6,23 @@ public class TestDeque {
 
         System.out.println("size() returns " + dek.size());
 
-        //dek.addFirst(null);  // test exception in addFirst method.
-        //dek.addLast(null);  // test exception in addLast method.
+        try {
+            dek.addFirst(null);  // test exception in addFirst method.
+        }catch(NullPointerException e) {
+            System.out.println("Passed");
+        }
+        try {
+            dek.addLast(null);  // test exception in addLast method.
+        }catch(NullPointerException e) {
+            System.out.println("Passed");
+        }
         //dek.iterator().remove(); // test exception in iterator remove method.
 
         // add N items, remove N+1 expecting exception
         dek.addFirst("one");
         dek.addFirst("two");
         dek.addFirst("three");
+        System.out.println("size() returns " + dek.size());
         dek.removeFirst();
         dek.removeFirst();
         dek.removeFirst();
@@ -33,7 +38,7 @@ public class TestDeque {
         dek.removeLast();
         dek.removeLast();
         dek.removeLast();
-        //dek.removeLast();
+        //dek.removeLast(); // uncomment for testing exception
         for (String s : dek) {
             System.out.println("iterator finds : " + s);
         }
@@ -47,8 +52,9 @@ public class TestDeque {
         dek.addFirst("like");
         dek.addFirst("Yoda");
         for (String s : dek) {
-            System.out.println(s);
+            System.out.print(s + " ");
         }
+        System.out.println();
         for (int i = 0; i < 6; i++) {
             dek.removeFirst();
         }
@@ -64,7 +70,7 @@ public class TestDeque {
 
         System.out.println("size() returns " + dek.size());
 
-        for ( String s : dek) {
+        for (String s : dek) {
             System.out.print(s + " ");
             }
         System.out.println();
@@ -84,6 +90,11 @@ public class TestDeque {
                 System.out.print(s + " ");
             }
         }
-        System.out.println();
+        
+         for (int i=0; i<5000;i++) {
+             dek.addFirst("F");
+             dek.addLast("L");
+             if(i%100==0) { System.out.print("."); }
+         }
     }
 }

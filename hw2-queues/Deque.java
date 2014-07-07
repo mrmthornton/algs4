@@ -1,34 +1,65 @@
-import java.lang.NullPointerException;
-import java.lang.UnsupportedOperationException;
+//import java.lang.NullPointerException;
+//import java.lang.UnsupportedOperationException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
 
 /**
- *  Implements a double ended queue using linked lists.
+ *  Implements a double ended queue an array.
  * @author Michael Thornton
  *
- * @param <Item>
+ * @param <Item> A place holder the clients type or object being stored.
  */
 public class Deque<Item> implements Iterable<Item> {
+
     /**
-     * front is the first node in the linked list
-     * if the deque is empty, front is null valued.
-     * if there is only one node, front and back are the same.
+     * the initial and the smallest array size.
      */
-    private Node front;
+    private static final int START_SIZE = 8;
+
     /**
-     * back is the last node in the linked list.
-     * if the deque is empty, back is null valued.
-     * if there is only one node, front and back are the same.
+     * Reduce the queue by this factor.
+     * It is not equal to 2, in order to avoid thrashing
      */
-    private Node back;
+    private static final int SHRINK_FACTOR = 4;
+
+    /**
+     * arr is the array holding queued items.
+     * arr is sized in the constructor.
+     */
+    private Item[] arr;
+
+    /**
+     * front is the index of the first item in the queue.
+     */
+    private int front;
+
+    /**
+     * back is the index of the last item in the queue.
+     */
+    private int back;
+
+    /**
+     * Capacity is the size of the array.
+     * This is a dynamic value since the array can be resized on demand.
+     */
+    private int capacity;
+
+    /**
+     * queueLength is the number of items on the deque.
+     */
+    private int queueLength;
 
     /**
      * Construct an empty deque.
      */
     public Deque() {
-        front = null;
-        back = null;
+        arr = (Item[]) new Object[START_SIZE];
+        capacity = START_SIZE;
+        // with one element in the queue front=back
+        // with an empty queue front>back
+        front = capacity / 2 + 1;
+        back = capacity / 2;
+        queueLength = 0;
     }
 
     /**
@@ -36,7 +67,7 @@ public class Deque<Item> implements Iterable<Item> {
      * @return true if empty
      */
     public boolean isEmpty() {
-        if (front == null) {
+        if (queueLength == 0) {
             return true;
         }
         return false;
@@ -45,17 +76,8 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * @return the number of items on the deque.
      */
-    @SuppressWarnings("unused")
     public int size() {
-        if (isEmpty()) {
-            return 0;
-        } else {
-            int count = 0;
-            for (Item i : this) {
-                count++;
-            }
-            return count;
-        }
+        return queueLength;
     }
 
     /**
@@ -67,16 +89,11 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "'null value' argument in addFirst.";
             throw new NullPointerException(msg);
         }
-        Node oldFront = front;
-        front = new Node();
-        front.nodeItem = item;
-        front.nextNodeBack = oldFront;
-        if (oldFront != null) { // if the deque was NOT empty
-            oldFront.nextNodeFront = front;
+        if (front == 0) {
+            resizeOrCenter();
         }
-        if (oldFront == null) { // if the deque WAS empty
-            back = front;
-        }
+        arr[--front] = item;
+        queueLength++;
     }
 
     /**
@@ -88,16 +105,11 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "'null value' argument in addLast.";
             throw new NullPointerException(msg);
         }
-        Node oldBack = back;
-        back = new Node();
-        back.nodeItem = item;
-        back.nextNodeFront = oldBack;
-        if (oldBack != null) { // if the deque was NOT empty.
-            oldBack.nextNodeBack = back;
+        if (back == capacity - 1) {
+            resizeOrCenter();
         }
-        if (oldBack == null) { // if the deque WAS empty
-            front = back;
-        }
+        arr[++back] = item;
+        queueLength++;
     }
 
     /**
@@ -109,15 +121,11 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeFirst() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = front.nodeItem;
-        // if this node IS the only one in the queue
-        if (front.nextNodeBack == null && front.nextNodeFront == null) {
-            front = null;
-            back = null;
-        } else {
-            front.nextNodeBack.nextNodeFront = null;
-            front = front.nextNodeBack;
-        }
+        Item item = arr[front];
+        arr[front] =  null; // free the memory for removed item
+        front++;
+        queueLength--;
+        checkForShrinkSize();
         return item;
     }
 
@@ -130,79 +138,116 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeLast() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = back.nodeItem;
-     // if this node IS the only one in the queue
-        if (front.nextNodeBack == null && front.nextNodeFront == null) {
-                back = null;
-                front = null;
-        } else {
-            back.nextNodeFront.nextNodeBack = null;
-            back = back.nextNodeFront;
-        }
+        Item item = arr[back];
+        arr[back] = null; // free the memory for removed item
+        back--;
+        queueLength--;
+        checkForShrinkSize();
         return item;
     }
 
     /**
      * return an iterator over items in order from front to back.
+     * @return ArrayIterator() the iterator method.
      */
     public Iterator<Item> iterator() {
-        return new ListIterator();
+        return new ArrayIterator();
     }
 
-
     /**
-     * Helper methods.
+     * HELPER METHODS.
      */
 
-
     /**
-     *  Inner classes.
+     * Determine if the queue meets the shrink criteria.
+     * only after removing an item.
      */
-
-
-    /**
-     * This Node class has two pointers, a forward pointer
-     *  and a backward pointer, allowing the linked list to
-     *  be used in a deque data structure.
-     */
-    private final class Node {
-        /**
-         * Reference to an instance of type'Item'.
-         */
-        private Item nodeItem;
-        /**
-         * Reference to the previous node.
-         */
-        private Node nextNodeFront;
-        /**
-         * Reference to the next node.
-         */
-        private Node nextNodeBack;
-        /**
-         * Sets all three fields to null value.
-         */
-        private Node() {
-            nodeItem = null;
-            nextNodeFront = null;
-            nextNodeBack = null;
+    private void checkForShrinkSize() {
+        if (isShrinkSize()) {
+            shrinkAndCenter();
         }
-    };
+    }
+    /**
+     * resizeOrCenter() is used when either the first or the last  array
+     * element is used. The size of the queue is NOT the trigger, so it
+     * checks the need for shrinking or growing or simply re-centering.
+     */
+    private void resizeOrCenter() {
+        if (isShrinkSize()) {
+            shrinkAndCenter();
+        } else if (queueLength > capacity / 2) {
+            growAndCenter();
+        } else {
+            center(capacity);
+        }
+    }
 
     /**
-     * An inner class.
-     * contains the methods needed for the Iterable interface.
+     *  Reduce the capacity and call the center method.
      */
-    private class ListIterator implements Iterator<Item> {
+    private void shrinkAndCenter() {
+        center(capacity / 2);
+    }
+
+    /**
+     *  Increase the capacity and call the center method.
+     */
+    private void growAndCenter() {
+        center(capacity * 2);
+    }
+
+    /**
+     * Creates a new array of size indicated by the argument.
+     * Copies and centers the existing queue in the new array.
+     * Changes variables and pointers to appropriate new values.
+     * @param newArraySize is the capacity of the new array.
+     */
+    private void center(final int newArraySize) {
+        Item[] newArray = (Item[]) new Object[newArraySize];
+        int  newFront = (newArraySize / 2) - (queueLength / 2);
+        for (int i = 0; i < queueLength; i++) {
+            newArray[newFront + i]  = arr[front + i];
+        }
+        front = newFront;
+        back = newFront + queueLength - 1;
+        // reassign pointer
+        arr = newArray;
+        capacity = newArraySize;
+    }
+
+    /**
+     * @return true if the array and queue meet the shrink criteria.
+     */
+    private boolean isShrinkSize() {
+        if ((queueLength > START_SIZE)
+                && (queueLength <= capacity / SHRINK_FACTOR)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *  INNER CLASSES.
+     */
+
+    /**
+     * An inner class with methods for the Iterable interface.
+     */
+    private class ArrayIterator implements Iterator<Item> {
+
         /**
-         * create a local copy of the first node in the linked list.
+         * create an index for the iterator.
          */
-        private Node current = front;
+        private int index = front;
 
         /**
          * @return true if the iteration has more elements.
          */
         public boolean hasNext() {
-            return current != null;
+            if (queueLength > 0 && index <= back) {
+                return true;
+            }
+            return  false;
         }
 
         /**
@@ -217,13 +262,13 @@ public class Deque<Item> implements Iterable<Item> {
          *@return Returns the next element in the iteration.
          */
         public Item next() {
-            Item item = current.nodeItem;
-            //TODO
-            if (item == null || current == null) { //did this fix the error?
-                String msg = "";
+            Item item = arr[index];
+            if (item == null) {
+                String msg = "array[" + String.valueOf(index)
+                        + "] does not exist.";
                 throw new NoSuchElementException(msg);
             }
-            current = current.nextNodeBack;
+            index++;
             return item;
         }
     };
