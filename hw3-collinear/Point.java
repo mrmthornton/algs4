@@ -1,5 +1,3 @@
-
-
 /**
  * @author: Michael Thornton
  * Email:mrmthornton@gmail.com
@@ -17,15 +15,6 @@ import java.util.Comparator;
  * allow comparison between position and slope.
  */
 public class Point implements Comparable<Point> {
-
-    /**
-     *  The x coordinate.
-     */
-    private final int x;
-    /**
-     * The  y coordinate.
-     */
-    private final int y;
     /**
      * Constant negative infinity.
      */
@@ -41,8 +30,15 @@ public class Point implements Comparable<Point> {
     /**
      * Constant negative zero.
      */
-    @SuppressWarnings("unused")
-    private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
+//     private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
+    /**
+     *  The x coordinate.
+     */
+    private final int x;
+    /**
+     * The  y coordinate.
+     */
+    private final int y;
 
     /**
      *  compare points by slope.
@@ -51,17 +47,13 @@ public class Point implements Comparable<Point> {
 
     /**
      * create the point (x, y).
-     * @param x  The x coordinate
-     * @param y  The y coordinate
+     * @param xComponent  The x coordinate of the new point.
+     * @param yComponent  The y coordinate of the new point.
      */
-    public Point( /**
-     *  @return -1, 0 , 1 result of lexicographical comparison.
-     *  The invoking point p1 is less than the argument point p2
-     *  if and only if either p1.y < p2.y or if p1.y = p2.y and p1.x < p2.x.
-     */int x, int y) {
+    public Point(final int xComponent, final int yComponent) {
         /* DO NOT MODIFY */
-        this.x = x;
-        this.y = y;
+        x = xComponent;
+        y = yComponent;
     }
 
     /**
@@ -69,21 +61,21 @@ public class Point implements Comparable<Point> {
      */
     public void draw() {
         /* DO NOT MODIFY */
-        StdDraw.point(x, y);
-        //StdDraw.circle(x, y, 0.30);
+        //StdDraw.point(x, y);
+        StdDraw.circle(x, y, 100.0);
     }
 
     /**
      * draw line between this point and that point to standard drawing.
-     * @param that
+     * @param that , a point.
      */
-    public void drawTo(Point that) {
+    public void drawTo(final Point that) {
         /* DO NOT MODIFY */
         StdDraw.line(this.x, this.y, that.x, that.y);
     }
 
     /**
-     * return string representation of this point.
+     * @return a string representation of this point.
      */
     public String toString() {
         /* DO NOT MODIFY */
@@ -91,44 +83,37 @@ public class Point implements Comparable<Point> {
     }
 
     /**
-     * @param that, the argument point.
-     *  @return -1, 0 , 1 result of lexicographical comparison.
-     *  The invoking point (x0, y0) is less than the argument point (x1, y1)
-     *  if and only if either y0 < y1 or if y0 = y1 and x0 < x1.
+     *  @return -1, 0, 1 as the result of lexicographical comparison.
+     *  The invoking point p1 is less than the argument point p2
+     *  if and only if either p1.y < p2.y or if p1.y = p2.y and p1.x < p2.x.
      */
-    public int compareTo(Point that) {
-        if (this.y < that.y || (this.y  == that.y && this.x < that.x)) {
-            return -1;  // this is less than 'that'
-        }
-        else if (this.y == that.y && this.x == that.x) {
-            return 0;   // this is equal to 'that'
-        }
-        else {
-            return 1;       // this is greater than 'that'
-        }
+    public int compareTo(final Point that) {
+        if (this.y < that.y 
+         || (this.y  == that.y && this.x < that.x)) {
+            return -1;    //  less than
+        } else if (this.y == that.y && this.x == that.x) {
+            return 0;     //  equal to 
+        } else {
+            return 1;     //  greater than
+         }
     }
 
     /**
-     * @param that, the argument point.
      * @return slope   given by the formula (y1 − y0) / (x1 − x0).
      *  Treat the slope of a horizontal line segment as positive zero
      *  Treat the slope of a vertical line segment as positive infinity
      *  Treat the slope of a degenerate line segment as negative infinity. 
+     *  @param that . 'this' and 'that' are end-points forming a line,
+     *  the slope of which is determined by slopeTo().
      */
-    public double slopeTo(Point that) {
-        // degenerate case
-        if (that.y == this.y && that.x == this.x) {
+    public double slopeTo(final Point that) {
+        if (that.y == this.y && that.x == this.x) {  // degenerate case
             return NEG_INF;
-        }
-        // vertical line
-        else if (that.x == this.x) {
+        } else if (that.x == this.x) { // vertical line
             return POS_INF;
-        }
-        // horizontal line
-        else if (that.y == this.y) {
+        } else if (that.y == this.y) {  // horizontal line
             return POS_ZERO;
-        }
-        else {
+        } else {
             return (double) (that.y - this.y) / (that.x - this.x);
         }
     }
@@ -136,8 +121,6 @@ public class Point implements Comparable<Point> {
     /**
      * helper methods
      */
-
-
 
     /**
      *  inner classes
@@ -155,38 +138,20 @@ public class Point implements Comparable<Point> {
      */
     private class  SlopeOrder implements Comparator<Point> {
 
-        @Override
         public int compare(final Point p1, final Point p2) {
-            double p1slope = Point.this.slopeTo(p1);
-            double p2slope = Point.this.slopeTo(p2);
-            // degenerative case returns NEG_INF;
-            // vertical line returns POS_INF;
-            // horizontal line returns POS_ZERO;
+            double slope1 = Point.this.slopeTo(p1);
+            double slope2 = Point.this.slopeTo(p2);
+            // slopeTo() degenerative case returns NEG_INF;
+            // slopeTo() vertical line returns POS_INF;
+            // slopeTo() horizontal line returns POS_ZERO;
 
-            // reverse the order of returned values if a negative slope
-            // is involved. This allows negative slopes to be 'greater than'
-            // positive slopes, and small values of negative slope are 
-            // 'greater than' larger values. This is useful when ordering 
-            // points in a continuous counter-clockwise manner.
-            //int ifNeg = 1;
-        
-            if (p1slope == NEG_INF  &&  p2slope == POS_INF) {
+            if (slope1 < slope2) 
                 return -1;
-            } else if ((p1slope == POS_INF && p2slope == POS_INF) ||
-                            (p1slope == NEG_INF && p2slope == NEG_INF)) {
+            else if (slope1 == slope2)
                 return 0;
-            } else if ((p1slope == POS_INF && p2slope == NEG_INF)) {
+            else 
                 return 1;
-            } else if (p1slope < p2slope) {
-                return -1;
-            } else if (p1slope - p2slope == 0) {
-                return 0; 
-            } else {
-                return 1;
-            }
         }
-
-
 
         @Override
         public boolean equals(final Object a) {
@@ -194,38 +159,4 @@ public class Point implements Comparable<Point> {
             throw new java.lang.UnsupportedOperationException(msg);            
         }
     };
-
-
-
-    /**
-     * unit test.
-     * @param args 
-     */
-    public static void main(String[] args) {
-
-        Point p0 = new Point(-1, 1);
-        Point p1 = new Point(0, 5);
-        Point p2 = new Point(1, 1);
-        Point p3 = new Point(5, 0);
-        Point p4 = new Point(-6, 0);
-
-        Point[] a = new Point[5];
-        a[0] = p0;
-        a[1] = p1;
-        a[2] = p2;
-        a[3] = p3;
-        a[4] = p4;
-        for (Point p : a) {
-            StdOut.println(p.x + " " + p.y);
-        }
-        StdOut.println();
-
-        for (int i = 1; i<5; i++) {
-            StdOut.println(p0.slopeTo(a[i]));
-        }
-        StdOut.println();
-
-        int comp = p0.SLOPE_ORDER.compare(p1, p2);
-        StdOut.println(comp);
-    }
 }

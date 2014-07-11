@@ -1,7 +1,3 @@
-package test;
-
-import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.StdDraw;
 
 /*************************************************************************
  *  Compilation:  javac PointPlotter.java
