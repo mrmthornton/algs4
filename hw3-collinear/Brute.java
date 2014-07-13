@@ -3,7 +3,8 @@ import java.util.Arrays;
 public class Brute {
     private static final int POINTS_IN_LINE = 4;
     
-    public Brute() { ; }
+    public Brute() {
+    } 
 
     public static void main(String[] args) {
         // read in the input
