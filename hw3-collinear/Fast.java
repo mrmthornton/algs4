@@ -3,8 +3,43 @@ import java.util.Arrays;
 public class Fast {
     private static final int POINTS_IN_LINE = 4;
 
-    public static void main(String[] args) {
+    private Point [][] lines;
+    private int lineIndex;
+    
+    public Fast() { }
+    
+    private Fast(int N) {
+        lines = new Point[N * (N-1)/POINTS_IN_LINE][2];
+        lineIndex = 0;
+    }
+        
+    private boolean isUnique(Point[] newLine) {
+        if (lineIndex == 0 || isNotDuplicate(newLine)) {
+            saveLine(newLine);
+            lineIndex++;
+            return true;
+        }
+        return false;
+    }
 
+    private void saveLine(Point[] newLine) {
+        for (int i = 0; i <= 1; i++) {
+            lines[lineIndex][i] = newLine[i];
+        }
+    }
+        
+    private boolean isNotDuplicate(Point[] newLine) {
+        // for each line in lines compare first two points against 
+        // the first two points in aNewLine.
+        for (int i = 0; i < lineIndex; i++) {
+            if (lines[i][0] == newLine[0] && lines[i][1] == newLine[1]) 
+                return false;
+        }
+        return true;
+    }
+ 
+    public static void main(String[] args) {
+        
         final int fieldSize = 32768;
         StdDraw.setXscale(0, fieldSize);
         StdDraw.setYscale(0, fieldSize);
@@ -18,13 +53,14 @@ public class Fast {
         // create arrays for point storage and manipulation
         Point [] pointsInOrder = new Point[N];  // all the points
         Point [] arr = new Point[N]; // sorted by slope
-        Point [] line = new Point[N]; // lines found
+        Point [] line = new Point[N]; // line found
+        Fast lines = new Fast(N);
         
         for (int idx = 0; idx < N; idx++) {
             pointsInOrder[idx] = new Point(in.readInt(), in.readInt());
         }
         Arrays.sort(pointsInOrder);
-        for ( Point p : pointsInOrder) {
+        for (Point p : pointsInOrder) {
             p.draw();
         }
         StdDraw.show(0);
@@ -32,37 +68,41 @@ public class Fast {
             arr[idx] = pointsInOrder[idx];
         }
 
-        //Stopwatch timer = new Stopwatch();  // start timer
-
-        for (int i = 0; i < N; i++) {
-            Point origin = pointsInOrder[i];
-            Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
-            line[0] = origin; // start of potential line
-            int j = 0;
-            int next = 0;
-            while (j < N) {
-                double slope = origin.slopeTo(arr[j]);  // slope from origin to next start
-                while (j + next < N  // still more points
-                        && origin.slopeTo(arr[j + next]) == slope ){  // slopes are equal
-                    line[next + 1] = arr[j + next]; // save index
-                    next++;
-                }
-                if (next >= POINTS_IN_LINE -1) {
-                    Arrays.sort(line, 0, next + 1);
-                    for (int n = 0; n < next; n++) {
-                        StdOut.print(line[n].toString() + " -> ");
+        
+        if (N >= POINTS_IN_LINE) {
+            //Stopwatch timer = new Stopwatch();  // start timer
+            for (int i = 0; i < N; i++) {
+                Point origin = pointsInOrder[i];
+                Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
+                int j = 0;
+                int next = 0;
+                while (j < N) {
+                    line[0] = origin; // start of potential line
+                    double slope = origin.slopeTo(arr[j]);  // slope from origin to next start
+                    while (j + next < N  // still more points
+                            && origin.slopeTo(arr[j + next]) == slope) {  // slopes are equal
+                        line[next + 1] = arr[j + next]; // save index
+                        next++;
                     }
-                    StdOut.println(line[next].toString());
-                    line[0].drawTo(line[next]);
-                    StdDraw.show(0);
-                    j = j + next + 1;
-                } else {
-                    j++;
+                    if (next >= POINTS_IN_LINE -1) {
+                        Arrays.sort(line, 0, next + 1);
+                        if (lines.isUnique(line)) {
+                            for (int n = 0; n < next; n++) { // print all points
+                                StdOut.print(line[n].toString() + " -> ");
+                            }
+                            StdOut.println(line[next].toString());
+                            line[0].drawTo(line[next]);
+                            StdDraw.show(0);
+                        }
+                        j = j + next;
+                    } else {
+                        j++;
+                    }
+                    next = 0;
                 }
-                next = 0;
             }
+            //StdOut.println(timer.elapsedTime()); // stop and print timer
         }
-        //StdOut.println(timer.elapsedTime()); // stop and print timer
     }
 }
 
