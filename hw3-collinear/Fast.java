@@ -34,11 +34,11 @@ public class Fast {
 
         //Stopwatch timer = new Stopwatch();  // start timer
 
+        int ln = 0; // the index for storing unique lines
         for (int i = 0; i < N; i++) {
             Point origin = pointsInOrder[i];
             Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
             int j = 0;
-            int ln = 0;
             int next = 0;
             while (j < N) {
                 line[ln][0] = origin; // start of potential line
