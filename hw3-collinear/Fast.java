@@ -18,8 +18,8 @@ public class Fast {
         // create arrays for point storage and manipulation
         Point [] pointsInOrder = new Point[N];  // all the points
         Point [] arr = new Point[N]; // sorted by slope
-        Point [] line = new Point[N]; // lines found
-        
+        Point [][] line = new Point[N/4][N]; // lines found
+
         for (int idx = 0; idx < N; idx++) {
             pointsInOrder[idx] = new Point(in.readInt(), in.readInt());
         }
@@ -38,23 +38,34 @@ public class Fast {
             Point origin = pointsInOrder[i];
             Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
             int j = 0;
+            int ln = 0;
             int next = 0;
             while (j < N) {
-                line[0] = origin; // start of potential line
+                line[ln][0] = origin; // start of potential line
                 double slope = origin.slopeTo(arr[j]);  // slope from origin to next start
                 while (j + next < N  // still more points
                         && origin.slopeTo(arr[j + next]) == slope ){  // slopes are equal
-                    line[next + 1] = arr[j + next]; // save index
+                    line[ln][next + 1] = arr[j + next]; // save index
                     next++;
                 }
                 if (next >= POINTS_IN_LINE -1) {
-                    Arrays.sort(line, 0, next + 1);
-                    for (int n = 0; n < next; n++) {
-                        StdOut.print(line[n].toString() + " -> ");
+                    Arrays.sort(line[ln], 0, next + 1);
+                    for (int idx = 0; idx <= ln; idx++) {
+                        // if the first two points are the same , then the line is duplicate
+                        if (ln > 0 
+                                && line[idx][0] == line[ln][0] 
+                                && line[idx][1] == line[ln][1]) {
+                            break;
+                        } else {
+                            for (int n = 0; n < next; n++) {
+                                StdOut.print(line[ln][n].toString() + " -> ");
+                            }
+                            StdOut.println(line[next].toString());
+                            line[ln][0].drawTo(line[ln][next]);
+                            StdDraw.show(0);
+                        }
+                        ln++;
                     }
-                    StdOut.println(line[next].toString());
-                    line[0].drawTo(line[next]);
-                    StdDraw.show(0);
                     j = j + next;
                 } else {
                     j++;
@@ -62,7 +73,7 @@ public class Fast {
                 next = 0;
             }
         }
-        //StdOut.println(timer.elapsedTime()); // stop and print timer
+            //StdOut.println(timer.elapsedTime()); // stop and print timer
     }
 }
 
