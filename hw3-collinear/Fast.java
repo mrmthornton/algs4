@@ -37,10 +37,10 @@ public class Fast {
         for (int i = 0; i < N; i++) {
             Point origin = pointsInOrder[i];
             Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
-            line[0] = origin; // start of potential line
             int j = 0;
             int next = 0;
             while (j < N) {
+                line[0] = origin; // start of potential line
                 double slope = origin.slopeTo(arr[j]);  // slope from origin to next start
                 while (j + next < N  // still more points
                         && origin.slopeTo(arr[j + next]) == slope ){  // slopes are equal
@@ -55,7 +55,7 @@ public class Fast {
                     StdOut.println(line[next].toString());
                     line[0].drawTo(line[next]);
                     StdDraw.show(0);
-                    j = j + next + 1;
+                    j = j + next;
                 } else {
                     j++;
                 }
