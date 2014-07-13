@@ -62,7 +62,7 @@ public class Point implements Comparable<Point> {
     public void draw() {
         /* DO NOT MODIFY */
         //StdDraw.point(x, y);
-        StdDraw.circle(x, y, 10.0);
+        StdDraw.circle(x, y, 100.0);
     }
 
     /**
