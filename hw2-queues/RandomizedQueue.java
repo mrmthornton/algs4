@@ -172,21 +172,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         center(capacity / 2);
     }
 
-<<<<<<< HEAD
     /**
      *  Increase the capacity and call the center method.
      */
     private void growAndCenter() {
         center(capacity * 2);
     }
-=======
-        /**
-         *
-         */
-        private RandomNodeIterator() {
-            index = count - 1;
-            Node current = head;
->>>>>>> a3673f4347a3e846844b50d206e8cafc43683458
 
     /**
      * Creates a new array of size indicated by the argument.
