@@ -7,11 +7,13 @@ public class Board {
     
     public Board(int[][] tiles)           // construct a board from an N-by-N array of tiles
     {
-        if ( (N = tiles.length) != tiles[0].length) { //  check for square matrix
+        N =  tiles.length;
+        if (N != tiles[0].length) { //  check for square matrix
             String msg = "This array is not NxN";
             throw new UnsupportedOperationException(msg);
         }
-        for (int i = 0; i < N; i++)
+            this.tiles = new int[N][N];
+            for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++) {
                 assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
                 this.tiles[i][j] = tiles[i][j];
@@ -25,7 +27,7 @@ public class Board {
                 goalPos[linearIndex(i, j)] = new Index2D(i, j);
             }
         goalValue[N-1][N-1] = 0;
-        goalPos[0] = goalPos[-1];
+        goalPos[0] = goalPos[N * N];
     }
    
     public int dimension()                 // board dimension N
@@ -37,10 +39,9 @@ public class Board {
     {
         int h = -1;  // the blank, value 0, will always be out of place
         for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++) {
-                if ( tiles[i][j] !=  linearIndex(i, j));
-                h++;
-            }
+            for (int j = 0; j < N; j++) 
+                if (tiles[i][j] !=  linearIndex(i, j))
+                    h++;
         return h;
     }
 
@@ -48,13 +49,16 @@ public class Board {
     {
         int deltaSum = 0;
         for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++) {
-                int deltaI = goalPos[tiles[i][j]].i - i;
-                int deltaJ = goalPos[tiles[i][j]].j - j;
-                deltaSum =  Math.abs(deltaI) + Math.abs(deltaJ);
-            }
+            for (int j = 0; j < N; j++)
+                if (tiles[i][j] != 0) {
+                    int deltaI = goalPos[tiles[i][j]].i - i;
+                    int deltaJ = goalPos[tiles[i][j]].j - j;
+                    deltaSum +=  Math.abs(deltaI) + Math.abs(deltaJ);
+                }
+            
         return deltaSum;
     }
+    
     public boolean isGoal()                // is this board the goal board?
     {
         for (int i = 0; i < N; i++)
@@ -63,21 +67,26 @@ public class Board {
             }
         return true;
     }
+    
     public Board twin() // a board obtained by exchanging two adjacent tiles in the same row
     {
         Board aTwin = new Board(tiles);
-        for ( int i = 0; i < N-1; i++) 
-            for (int j = 0; j < N; j++)
-                if (aTwin.tiles[i][j] != 0 && aTwin.tiles[i][j+1] != 0)
-                    swap(aTwin, i, j, i, j + 1);
+        int i = 0;
+        while (i < 2) {
+            if (aTwin.tiles[i][0] != 0 && aTwin.tiles[i][1] != 0) {
+                swap(aTwin, i, 0, i, 1);
+                break;
+            } else 
+                i++;
+        }
         return aTwin;
     }
     
-    public boolean equals(Object y)        // does this board equal y?
+    public boolean equals(Object y)        //         System.out.println(twin.toString());does this board equal y?
     {
         if (y == this) return true;  // are the references pointing to the same instance?
 
-        if (y== null) return false; // is y non null?
+        if (y == null) return false; // is y non null?
 
         if (y.getClass() != this.getClass()) return false;  // is y the same of the same class?
 
@@ -172,16 +181,15 @@ public class Board {
         brd.tiles[i2][j2] = temp;
     }
     
-    // PRIVATE CLASSES
+    // INNER CLASSES
     
     private final class Index2D {
-        protected final int i;
-        protected final int j;
+        private final int i;
+        private final int j;
         
         Index2D(int i, int j) {
             this.i = i;
             this.j = j;            
         }
     }
-    
 }

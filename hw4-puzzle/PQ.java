@@ -5,7 +5,7 @@ public final class PQ<Key extends Comparable<Key>> {
     private int N = 0;
     private final Key[] pq;
 
-   // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     PQ(int capacity) {
         pq = (Key[]) new Comparable[capacity+1];
     }
