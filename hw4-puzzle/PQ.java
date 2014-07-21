@@ -1,12 +1,12 @@
 /**
  * @author mike
  */
-public final class PrioritQ<Key extends Comparable<Key>> {
+public final class PQ<Key extends Comparable<Key>> {
     private int N = 0;
     private final Key[] pq;
 
-    @SuppressWarnings("unchecked")
-    PrioritQ (int capacity) {
+   // @SuppressWarnings("unchecked")
+    PQ(int capacity) {
         pq = (Key[]) new Comparable[capacity+1];
     }
 
@@ -28,7 +28,7 @@ public final class PrioritQ<Key extends Comparable<Key>> {
     }
 
     private void swim(int k) {
-        while ( k<1 && less(k/2, k)) {
+        while ( k>1 && less(k/2, k)) {
             exch(k, k/2);
             k = k/2;
         }
@@ -62,14 +62,26 @@ public final class PrioritQ<Key extends Comparable<Key>> {
      * @param args
      */
     public static void main(String[] args) {
-        PrioritQ<String> pQ = new PrioritQ<String>(28);
-        pQ.insert("F");
+        PQ<String> pQ = new PQ<String>(28);
         pQ.insert("A");
+        pQ.insert("B");
         pQ.insert("C");
         pQ.insert("D");
         pQ.insert("E");
-        pQ.insert("A");
+        pQ.insert("F");
         pQ.insert("G");
+        pQ.insert("H");
+        pQ.insert("I");
+        pQ.insert("J");
+        pQ.insert("K");
+        pQ.insert("L");
+        pQ.insert("M");
+        pQ.insert("N");
+        pQ.insert("O");
+        StdOut.print(pQ.delMax());
+        StdOut.print(pQ.delMax());
+        StdOut.print(pQ.delMax());
+        StdOut.print(pQ.delMax());
         StdOut.print(pQ.delMax());
         StdOut.print(pQ.delMax());
         StdOut.print(pQ.delMax());

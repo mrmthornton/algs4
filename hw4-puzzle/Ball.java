@@ -7,8 +7,16 @@ public class Ball {
     
     public Ball()
     {
-        radius = 2;
         // initialize position and velocity for each ball instance
+        radius = 1;
+        rx =0.5; ry = 0.5;
+        vx = 0; vy = 0;
+    }
+    public Ball( double rad, double x, double y, double xVel, double yVel) {
+        // client initialized ball
+        radius = rad;
+        rx = x; ry = y;
+        vx = xVel; vy = yVel;
     }
     
     public void move(double dt)
