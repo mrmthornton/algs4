@@ -1,8 +1,10 @@
 import java.util.Comparator;
 
 public class Solver {
-    Comparator<Node> MANHATTAN = new Manhattan();
-    MinPQ<Node> minpq = new MinPQ<Node>(MANHATTAN);
+    private Node removed;
+    private Comparator<Node> MANHATTAN = new Manhattan();
+    private Queue<Board> solutionQueue = new Queue<Board>();
+    private MinPQ<Node> minpq = new MinPQ<Node>(MANHATTAN);
     
     public Solver(Board initial)            // find a solution to the initial board (using the A* algorithm)
     {
@@ -17,35 +19,34 @@ public class Solver {
     
     public int moves()                      // min number of moves to solve initial board; -1 if no solution
     {
-        return minpq.min().moves;
+        return removed.moves;
     }
     
     public Iterable<Board> solution()       // sequence of boards in a shortest solution; null if no solution
     {
-        // temp code to make compiler happy.
-        int [][] tempArr = {{1,2},{3,0}};
-        Board brd = new Board(tempArr);
-        Stack<Board> st = new Stack<Board>();
-        st.push(brd);
-        return st; 
+        return solutionQueue; 
     }
     
     // HELPER METHODS
      private void solve() {
          while (minpq.min().board.isGoal() != true) {
              // save and deque minimum priority node.
-             Node removed = minpq.min();
+             removed = minpq.min();
+             solutionQueue.enqueue(removed.board);
              minpq.delMin();
 
              // add all nodes one move from the dequed node.
              int moves = removed.moves + 1;
              Iterable<Board> neighbors = removed.board.neighbors();
              for (Board board : neighbors) {
-                 //if (board.equals(removed.previous.board) != true) {
+                 if (removed.previous == null
+                         || board.equals(removed.previous.board) == false) {
                      minpq.insert(new Node(board, moves, removed));
-                 //}
+                 }
              }
          }
+         removed = minpq.min();
+         minpq.delMin();
      }
 
     // INNER CLASSES
