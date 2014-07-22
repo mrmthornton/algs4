@@ -2,19 +2,22 @@ import java.util.Comparator;
 
 public class Solver {
     private Node removed;
+    private Node removedTwin;
     private Comparator<Node> MANHATTAN = new Manhattan();
-    private Queue<Board> solutionQueue = new Queue<Board>();
     private MinPQ<Node> minpq = new MinPQ<Node>(MANHATTAN);
+    private MinPQ<Node> twinpq = new MinPQ<Node>(MANHATTAN);
     
     public Solver(Board initial)            // find a solution to the initial board (using the A* algorithm)
     {
+        Board twin = initial.twin();
         minpq.insert(new Node(initial, 0, null));
+        twinpq.insert(new Node(twin, 0, null));
         solve();
     }
     
     public boolean isSolvable()             // is the initial board solvable?
     {
-        return false;
+        return removed.board.isGoal();
     }
     
     public int moves()                      // min number of moves to solve initial board; -1 if no solution
@@ -24,16 +27,30 @@ public class Solver {
     
     public Iterable<Board> solution()       // sequence of boards in a shortest solution; null if no solution
     {
-        return solutionQueue; 
+        Stack<Board> solutionStack = new Stack<Board>();
+        if (isSolvable()) {
+            Node current = removed;
+            while (true) {
+                solutionStack.push(current.board);
+                if (current.previous == null) break;
+                current = current.previous;
+            }
+        } else {
+            solutionStack = null;
+        }
+        return solutionStack; 
     }
     
     // HELPER METHODS
      private void solve() {
-         while (minpq.min().board.isGoal() != true) {
+         while (minpq.min().board.isGoal() == false
+                 && twinpq.min().board.isGoal() == false) {
              // save and deque minimum priority node.
              removed = minpq.min();
-             solutionQueue.enqueue(removed.board);
              minpq.delMin();
+             // and twin
+             removedTwin = twinpq.min();
+             twinpq.delMin();
 
              // add all nodes one move from the dequed node.
              int moves = removed.moves + 1;
@@ -44,9 +61,19 @@ public class Solver {
                      minpq.insert(new Node(board, moves, removed));
                  }
              }
+             // and twin
+             neighbors = removedTwin.board.neighbors();
+             for (Board board : neighbors) {
+                 if (removedTwin.previous == null
+                         || board.equals(removedTwin.previous.board) == false) {
+                     twinpq.insert(new Node(board, moves, removedTwin));
+                 }
+             }
          }
          removed = minpq.min();
          minpq.delMin();
+         if (removed.board.isGoal() != true)
+             removed = new Node(removed.board, -1, removed.previous);
      }
 
     // INNER CLASSES
