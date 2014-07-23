@@ -1,10 +1,8 @@
-
 public class Board {
-    private int [][] tiles;
-    private Index2D [] goalPos; 
-    private int [][] goalValue;
+    private char [][] tiles;
+    private char [][] goalPos; //TODO make char[N * N + 1][2] for goal pos
     private int N;
-    
+
     public Board(int[][] tiles)           // construct a board from an N-by-N array of tiles
     {
         N =  tiles.length;
@@ -12,22 +10,41 @@ public class Board {
             String msg = "This array is not NxN";
             throw new UnsupportedOperationException(msg);
         }
-            this.tiles = new int[N][N];
+            this.tiles = new char[N][N];
             for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++) {
                 assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
-                this.tiles[i][j] = tiles[i][j];
+                this.tiles[i][j] = (char)tiles[i][j];
             }
-        // setup arrays for goal values and goal positions
-        goalValue = new int[N][N];
-        goalPos = new Index2D[N * N + 1];
+        // setup array for goal positions
+        goalPos = new char[N * N + 1][2];
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++) {
-                goalValue[i][j] = linearIndex(i, j);
-                goalPos[linearIndex(i, j)] = new Index2D(i, j);
+                goalPos[linearIndex(i, j)][0] = (char) i;
+                goalPos[linearIndex(i, j)][1] = (char) j;
             }
-        goalValue[N-1][N-1] = 0;
-        goalPos[0] = goalPos[N * N];
+    }
+    
+    private Board(char[][] tiles)           // construct a board from an N-by-N array of tiles
+    {
+        N =  tiles.length;
+        if (N != tiles[0].length) { //  check for square matrix
+            String msg = "This array is not NxN";
+            throw new UnsupportedOperationException(msg);
+        }
+            this.tiles = new char[N][N];
+            for (int i = 0; i < N; i++)
+            for (int j = 0; j < N; j++) {
+                assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
+                this.tiles[i][j] = (char)tiles[i][j];
+            }
+        // setup array for goal positions
+        goalPos = new char[N * N + 1][2];
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < N; j++) {
+                goalPos[linearIndex(i, j)][0] = (char) i;
+                goalPos[linearIndex(i, j)][1] = (char) j;
+            }
     }
    
     public int dimension()                 // board dimension N
@@ -51,8 +68,8 @@ public class Board {
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
                 if (tiles[i][j] != 0) {
-                    int deltaI = goalPos[tiles[i][j]].i - i;
-                    int deltaJ = goalPos[tiles[i][j]].j - j;
+                    int deltaI = (int) goalPos[tiles[i][j]][0] - i;
+                    int deltaJ = (int) goalPos[tiles[i][j]][1] - j;
                     deltaSum +=  Math.abs(deltaI) + Math.abs(deltaJ);
                 }
             
@@ -63,9 +80,10 @@ public class Board {
     {
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++) {
-                if (tiles[i][j] != goalValue[i][j]) return false;
+                if (i == N - 1 && j == N -1) return true;
+                if (tiles[i][j] != linearIndex(i,j)) return false;
             }
-        return true;
+        return false; //  this should never be reached.
     }
     
     public Board twin() // a board obtained by exchanging two adjacent tiles in the same row
@@ -134,7 +152,8 @@ public class Board {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tiles[i][j]));
+                int val = (int)tiles[i][j];
+                s.append(String.format("%2d ", val));
             }
             s.append("\n");
         }
@@ -174,9 +193,9 @@ public class Board {
         if (dir == 'U') swap(nb, blank.i, blank.j, blank.i - 1, blank.j);
         if (dir == 'D') swap(nb, blank.i, blank.j, blank.i + 1, blank.j);
     }
-    
+     
     private void swap(Board brd, int i1, int j1, int i2, int j2) {
-        int temp = brd.tiles[i1][j1];
+        char temp = brd.tiles[i1][j1];
         brd.tiles[i1][j1] = brd.tiles[i2][j2];
         brd.tiles[i2][j2] = temp;
     }
