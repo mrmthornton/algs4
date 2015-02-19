@@ -1,9 +1,7 @@
-
-
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import edu.princeton.cs.introcs.StdOut;
-import edu.princeton.cs.introcs.StdRandom;
+//import edu.princeton.cs.introcs.StdOut;
+//import edu.princeton.cs.introcs.StdRandom;
 
 public class MakeInputFile {
 

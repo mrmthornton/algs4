@@ -38,10 +38,10 @@ public class Percolation {
     private int bottom;
 
     /**
-     *  create an N+1 by N+1 grid with all sites = blocked.
-     *  use N+1 since the convention for locations is 1 to N
-     *  this uses some extra space, but is simple to implement
-     * @param n , the grid size parameter.
+     *  create an (N+1) by (N+1) grid with all sites = blocked.
+     *  use N+1 since by convention the location index starts at 1.
+     *  This uses some extra space, but is simple to implement.
+     * @param n , the grid size parameter passed into the class.
      */
     public Percolation(final int n) {
         if (n < 1) {
