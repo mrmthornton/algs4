@@ -2,6 +2,10 @@
 /**
  * Creates an N  by N array with virtual TOP and BOTTOM locations.
  */
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
     /**
      * any site in the array can be blocked or open or full.
