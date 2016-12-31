@@ -3,6 +3,11 @@
  *  Competes T trials.
  *  Gathers and reports statistics.
  */
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import edu.princeton.cs.algs4.Stopwatch;
+
 public class PercolationStats {
     /**
      *  N is the grid dimension.
