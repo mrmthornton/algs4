@@ -43,7 +43,8 @@ public class PercolationVisualizer {
 
     }
 
-    public static void main(String[] args) {
+    @SuppressWarnings("deprecation")
+	public static void main(String[] args) {
         In in = new In(args[0]);      // input file
         int N = in.readInt();         // N-by-N percolation system
 

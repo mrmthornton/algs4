@@ -10,15 +10,14 @@
  *  open sites (that aren't full) in white, and blocked sites in black.
  *
  ****************************************************************************/
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
 public class InteractivePercolationVisualizer {
 
-    public static void main(String[] args) {
+    @SuppressWarnings("deprecation")
+	public static void main(String[] args) {
         // N-by-N percolation system (read from command-line, default = 10)
         int N = 10;          
         if (args.length == 1) N = Integer.parseInt(args[0]);

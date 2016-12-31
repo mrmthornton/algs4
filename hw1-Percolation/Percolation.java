@@ -2,8 +2,7 @@
 /**
  * Creates an N  by N array with virtual TOP and BOTTOM locations.
  */
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
+
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
@@ -182,7 +181,11 @@ public class Percolation {
      */
     private int gridToIndex(final int i, final int j) {
         // translate i, j into a flat index for the union find
-        return i * N + j;
+        int offsetIndex = 1 + i * N + j; 
+    	// The offset of 1 is used because the there are N * N grid locations,
+        // plus a virual top at index 0, and a virual bottom at index N * N + 1
+        // so the first grid location is index 1, not 0.
+        return offsetIndex; 
     }
     /**
      * Check that the parameters  i and j are within bounds.
