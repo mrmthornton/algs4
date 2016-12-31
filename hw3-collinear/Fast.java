@@ -1,4 +1,7 @@
 import java.util.Arrays;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdDraw;
 
 public class Fast {
     private static final int POINTS_IN_LINE = 4;

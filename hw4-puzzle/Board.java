@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.Stack;
+
 public class Board {
     private char [][] tiles;
     private char [][] goalPos; //TODO make char[N * N + 1][2] for goal pos

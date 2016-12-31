@@ -52,7 +52,8 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-    public Deque() {
+	@SuppressWarnings("unchecked")
+	public Deque() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
         // with one element in the queue front=back
@@ -202,8 +203,9 @@ public class Deque<Item> implements Iterable<Item> {
      * Changes variables and pointers to appropriate new values.
      * @param newArraySize is the capacity of the new array.
      */
-    private void center(final int newArraySize) {
-        Item[] newArray = (Item[]) new Object[newArraySize];
+	private void center(final int newArraySize) {
+        @SuppressWarnings("unchecked")
+		Item[] newArray = (Item[]) new Object[newArraySize];
         int  newFront = (newArraySize / 2) - (queueLength / 2);
         for (int i = 0; i < queueLength; i++) {
             newArray[newFront + i]  = arr[front + i];

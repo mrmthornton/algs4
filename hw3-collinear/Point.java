@@ -8,6 +8,7 @@
  */
 
 import java.util.Comparator;
+import edu.princeton.cs.algs4.StdDraw;
 
 /**
  * Creates a tuple with two ordinates.

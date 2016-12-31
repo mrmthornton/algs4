@@ -1,4 +1,4 @@
-
+import edu.princeton.cs.algs4.StdOut;
 
 public class temp {
     private static final double pos = Double.POSITIVE_INFINITY;

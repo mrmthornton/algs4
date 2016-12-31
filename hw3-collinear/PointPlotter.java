@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.In;
 
 /*************************************************************************
  *  Compilation:  javac PointPlotter.java
@@ -12,7 +14,8 @@
  *************************************************************************/
 
 public class PointPlotter {
-    public static void main(String[] args) {
+    @SuppressWarnings("deprecation")
+	public static void main(String[] args) {
 
         // rescale coordinates and turn on animation mode
         //StdDraw.setXscale(0, 32768);

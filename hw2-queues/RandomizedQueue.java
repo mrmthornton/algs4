@@ -2,6 +2,7 @@
 //import java.lang.UnsupportedOperationException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import edu.princeton.cs.algs4.StdRandom;
 
 /**
  * Implements a Randomized queue.
@@ -54,7 +55,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-    public RandomizedQueue() {
+    @SuppressWarnings("unchecked")
+	public RandomizedQueue() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
         // with one element in the queue front=back
@@ -186,7 +188,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * @param newArraySize is the capacity of the new array.
      */
     private void center(final int newArraySize) {
-        Item[] newArray = (Item[]) new Object[newArraySize];
+        @SuppressWarnings("unchecked")
+		Item[] newArray = (Item[]) new Object[newArraySize];
         int  newFront = (newArraySize / 2) - (queueLength / 2);
         for (int i = 0; i < queueLength; i++) {
             newArray[newFront + i]  = arr[front + i];
