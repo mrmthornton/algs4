@@ -136,12 +136,12 @@ public class Percolation {
         // isOpen uses r,c, row column indexing
         int r = i + 1; int c = j + 1;
         // left neighbor exists and is open
-        if (j > 0 && isOpen(r - 1,  c - 2)) {
+        if (j > 0 && isOpen(r,  c - 1)) {
             uf.union(p, p - 1);
             ufp.union(p, p - 1);
         }
         // right neighbor exists and is open
-        if (j < N - 1 && isOpen(r - 1,  c)) {
+        if (j < N - 1 && isOpen(r,  c + 1)) {
             uf.union(p, p + 1);
             ufp.union(p, p + 1);
         }
@@ -150,12 +150,12 @@ public class Percolation {
             ufp.union(p, top);
         }
         // up neighbor exists and is open
-        if (i > 0 && isOpen(r - 2,  c - 1)) {
+        if (i > 0 && isOpen(r - 1,  c)) {
             uf.union(p, p - N);
             ufp.union(p, p - N);
         }
         // down neighbor exists and is open
-        if (i < N - 1 && isOpen(r,  c - 1)) {
+        if (i < N - 1 && isOpen(r + 1,  c)) {
             uf.union(p, p + N);
             ufp.union(p, p + N);
         }
@@ -177,7 +177,7 @@ public class Percolation {
      *
      * @param i the row variable indexed at 1.
      * @param j the column variable indexed at 1.
-     * @return integer, a flat array index 0 to N^2 - 1
+     * @return integer, a flat array index 0 to N^2 - 1 
      */
     private int gridToIndex(final int i, final int j) {
         // translate i, j into a flat index for the union find
