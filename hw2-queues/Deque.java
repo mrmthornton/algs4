@@ -1,7 +1,8 @@
 //import java.lang.NullPointerException;
 //import java.lang.UnsupportedOperationException;
-import java.util.NoSuchElementException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 
 /**
  *  Implements a double ended queue an array.
@@ -52,8 +53,8 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-	@SuppressWarnings("unchecked")
-	public Deque() {
+    @SuppressWarnings("unchecked")
+    public Deque() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
         // with one element in the queue front=back
@@ -64,8 +65,8 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * is the deque empty?
-     * @return true if empty
+     * is the deque empty? .
+     * Return true if empty
      */
     public boolean isEmpty() {
         if (queueLength == 0) {
@@ -75,15 +76,14 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * @return the number of items on the deque.
+     * Return the number of items on the deque.
      */
     public int size() {
         return queueLength;
     }
 
     /**
-     * insert the item at the front.
-     * @param item
+     * @param item , insert the item at the front.
      */
     public void addFirst(Item item) {
         if (item == null) {
@@ -98,8 +98,8 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     *  insert the item at the end.
-     * @param item
+     * 
+     * @param item , insert the item at the end.
      */
     public void addLast(Item item)  {
         if (item == null) {
@@ -122,7 +122,7 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeFirst() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = arr[front];
+        final Item item = arr[front];
         arr[front] =  null; // free the memory for removed item
         front++;
         queueLength--;
@@ -139,7 +139,7 @@ public class Deque<Item> implements Iterable<Item> {
             String msg = "removeLast() : deque is empty !";
             throw new NoSuchElementException(msg);
         }
-        Item item = arr[back];
+        final Item item = arr[back];
         arr[back] = null; // free the memory for removed item
         back--;
         queueLength--;
@@ -168,6 +168,7 @@ public class Deque<Item> implements Iterable<Item> {
             shrinkAndCenter();
         }
     }
+    
     /**
      * resizeOrCenter() is used when either the first or the last  array
      * element is used. The size of the queue is NOT the trigger, so it
@@ -203,9 +204,9 @@ public class Deque<Item> implements Iterable<Item> {
      * Changes variables and pointers to appropriate new values.
      * @param newArraySize is the capacity of the new array.
      */
-	private void center(final int newArraySize) {
+    private void center(final int newArraySize) {
         @SuppressWarnings("unchecked")
-		Item[] newArray = (Item[]) new Object[newArraySize];
+        Item[] newArray = (Item[]) new Object[newArraySize];
         int  newFront = (newArraySize / 2) - (queueLength / 2);
         for (int i = 0; i < queueLength; i++) {
             newArray[newFront + i]  = arr[front + i];
@@ -273,5 +274,5 @@ public class Deque<Item> implements Iterable<Item> {
             index++;
             return item;
         }
-    };
+    }
 }
