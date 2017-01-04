@@ -1,8 +1,11 @@
+import edu.princeton.cs.algs4.StdRandom;
+
 //import java.lang.NullPointerException;
 //import java.lang.UnsupportedOperationException;
-import java.util.NoSuchElementException;
+
 import java.util.Iterator;
-import edu.princeton.cs.algs4.StdRandom;
+import java.util.NoSuchElementException;
+
 
 /**
  * Implements a Randomized queue.
@@ -56,7 +59,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * Construct an empty deque.
      */
     @SuppressWarnings("unchecked")
-	public RandomizedQueue() {
+    public RandomizedQueue() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
         // with one element in the queue front=back
@@ -67,7 +70,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * is the deque empty?
+     * is the deque empty? .
      * @return true if empty
      */
     public boolean isEmpty() {
@@ -78,15 +81,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * @return the number of items on the deque.
+     * Return the number of items on the deque.
      */
     public int size() {
         return queueLength;
     }
 
     /**
-     *  insert the item at the end.
-     * @param item
+     * @param item , insert the item at the end.
      */
     public void enqueue(final Item item)  {
         if (item == null) {
@@ -99,7 +101,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         arr[++back] = item;
         queueLength++;
     }
-
 
     /**
      * delete and return a random item.
@@ -152,6 +153,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             shrinkAndCenter();
         }
     }
+    
     /**
      * resizeOrCenter() is used when either the first or the last  array
      * element is used. The size of the queue is NOT the trigger, so it
@@ -189,7 +191,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      */
     private void center(final int newArraySize) {
         @SuppressWarnings("unchecked")
-		Item[] newArray = (Item[]) new Object[newArraySize];
+        Item[] newArray = (Item[]) new Object[newArraySize];
         int  newFront = (newArraySize / 2) - (queueLength / 2);
         for (int i = 0; i < queueLength; i++) {
             newArray[newFront + i]  = arr[front + i];
@@ -272,7 +274,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 randomIndex[i] = i;
             }
             StdRandom.shuffle(randomIndex);
-         }
+        }
+        
         /**
          * @return true if the iteration has more elements.
          */
@@ -308,5 +311,5 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             localIndex++;
             return item;
         }
-    };
+    }
 }
