@@ -25,6 +25,8 @@
  *
  *************************************************************************/
 
+import edu.princeton.cs.algs4.In;
+
 public class PuzzleCheckerShowSolution {
 
     public static void main(String[] args) {
