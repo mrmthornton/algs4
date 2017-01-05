@@ -24,7 +24,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     /**
      * Reduce the queue by this factor.
-     * It is not equal to 2, in order to avoid thrashing
+     * It is not equal to 2, in order to avoid thrashing.
      */
     private static final int SHRINK_FACTOR = 4;
 
@@ -184,7 +184,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * Creates a new array of size indicated by the argument.
+     * Creates a new array of a size indicated by the argument.
      * Copies and centers the existing queue in the new array.
      * Changes variables and pointers to appropriate new values.
      * @param newArraySize is the capacity of the new array.
@@ -204,10 +204,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * Creates a new array of size indicated by the argument.
-     * Copies and centers the existing queue in the new array.
+     * Shifts one of the two queue segments, joining it to the other segment,
+     * and overwritting, or effectively erasing the specified element.
+     * The choice of which segment to shift is based on touching the fewest elements.
      * Changes variables and pointers to appropriate new values.
-     * @param removedIndexNumber is the capacity of the new array.
+     * @param removedIndexNumber is the element being overwritten.
      */
     private void shift(final int removedIndexNumber) {
         int index = removedIndexNumber;

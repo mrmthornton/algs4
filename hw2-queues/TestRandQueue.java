@@ -5,27 +5,31 @@
  */
 public final class TestRandQueue {
     RandomizedQueue<String> Rq;
+    
     private TestRandQueue() {
-    /**
-     * exercises the RandomizedQueue including exception conditions.
-     * @param args None expected
-     */
-    Rq = new RandomizedQueue<String>();
+        /**
+         * exercises the RandomizedQueue including exception conditions.
+         * @param args None expected
+         */
+        Rq = new RandomizedQueue<String>();
     }
 
+    /**
+     * No arguments are expected.
+     */
     public static void main(final String[] args) {
         TestRandQueue Trq = new TestRandQueue();
 
         // CHECKING EXCEPTIONS
-//        Trq.Rq.iterator().next();        // test exception in iterator next(), no next. 
-//        Trq.Rq.iterator().remove();   // test exception in iterator remove().
-//        Trq.Rq.enqueue(null);           // test exception in enqueue method.
-//        Trq.Rq.dequeue();                 // test exception in dequeue method.
+        //Trq.Rq.iterator().next();        // test exception in iterator next(), no next. 
+        //Trq.Rq.iterator().remove();   // test exception in iterator remove().
+        //Trq.Rq.enqueue(null);           // test exception in enqueue method.
+        //Trq.Rq.dequeue();                 // test exception in dequeue method.
 
         // CHECKING METHODS
         // enqueue
         Trq.Rq.enqueue("enqueue");
-        if (Trq.Rq.size() !=1) {
+        if (Trq.Rq.size() != 1) {
             System.out.println("Failed : size should be 1.");
         }
         // dequeue
@@ -52,7 +56,7 @@ public final class TestRandQueue {
 
 
 
-        Trq.Rq.enqueue("\t(tabs)\t");
+        Trq.Rq.enqueue("\t<--tabs-->\t");
         Trq.Rq.enqueue("I");
         Trq.Rq.enqueue("am");
         Trq.Rq.enqueue("speaking");
@@ -89,7 +93,7 @@ public final class TestRandQueue {
         // uncomment next line for testing
         //for (int i = 0; i < 6; i++)
         {
-            System.out.print ("testing sample() exception ");
+            System.out.print("testing sample() exception ");
             System.out.println(Trq.Rq.sample() + " ");
         }
 
@@ -101,13 +105,13 @@ public final class TestRandQueue {
         }
         // starting clean with new  Randomized Queue
         Trq.Rq = new  RandomizedQueue<String>();
-        for (int i = 0; i<500; i++) {
+        for (int i = 0; i < 500; i++) {
             Trq.Rq.enqueue("A");
         }
-        for (int i = 0; i<500; i++) {
+        for (int i = 0; i < 500; i++) {
             Trq.Rq.sample();
         }
-        for (int i = 0; i<500; i++) {
+        for (int i = 0; i < 500; i++) {
             Trq.Rq.dequeue();
         }
         System.out.println();
