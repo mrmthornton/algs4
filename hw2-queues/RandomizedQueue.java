@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.StdRandom;
 
-//import java.lang.NullPointerException;
-//import java.lang.UnsupportedOperationException;
+// import java.lang.NullPointerException;
+// import java.lang.UnsupportedOperationException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -24,7 +24,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     /**
      * Reduce the queue by this factor.
-     * It is not equal to 2, in order to avoid thrashing
+     * It is not equal to 2, in order to avoid thrashing.
      */
     private static final int SHRINK_FACTOR = 4;
 
@@ -58,7 +58,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
@@ -111,7 +110,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             String msg = "in dequeue method, accessing empty queue !";
             throw new NoSuchElementException(msg);
         }
-        //StdRandom.setSeed(1);
+        // StdRandom.setSeed(1);
         int index = front + StdRandom.uniform(queueLength);
         Item item = arr[index];
         shift(index); // removes element and adjusts variables
@@ -184,13 +183,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * Creates a new array of size indicated by the argument.
-     * Copies and centers the existing queue in the new array.
-     * Changes variables and pointers to appropriate new values.
-     * @param newArraySize is the capacity of the new array.
+     * Copies and centers the existing queue in the existing array.
+     * Changes variables and pointers appropriately.
+     * Free's unused memory
+     * @param newArraySize is the capacity of the resulting array.
      */
     private void center(final int newArraySize) {
-        @SuppressWarnings("unchecked")
         Item[] newArray = (Item[]) new Object[newArraySize];
         int  newFront = (newArraySize / 2) - (queueLength / 2);
         for (int i = 0; i < queueLength; i++) {
@@ -204,10 +202,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * Creates a new array of size indicated by the argument.
-     * Copies and centers the existing queue in the new array.
+     * Shifts one of the two queue segments, joining it to the other segment,
+     * and overwritting, or effectively erasing the specified element.
+     * The choice of which segment to shift is based on touching the fewest elements.
      * Changes variables and pointers to appropriate new values.
-     * @param removedIndexNumber is the capacity of the new array.
+     * @param removedIndexNumber is the element being overwritten.
      */
     private void shift(final int removedIndexNumber) {
         int index = removedIndexNumber;
