@@ -1,5 +1,5 @@
-//import java.lang.NullPointerException;
-//import java.lang.UnsupportedOperationException;
+// import java.lang.NullPointerException;
+// import java.lang.UnsupportedOperationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -53,7 +53,6 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
-    @SuppressWarnings("unchecked")
     public Deque() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
