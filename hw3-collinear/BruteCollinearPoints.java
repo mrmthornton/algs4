@@ -2,6 +2,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.Stopwatch;
 
 import java.util.Arrays;
 
@@ -19,16 +20,16 @@ public class BruteCollinearPoints {
      * The number of line segments found in the input.
      * returns the number of line segments found.
      */
-    public int numberOfSegments() {
-        
-    }
+    //public int numberOfSegments() {
+    //    
+    //}
     
     /**
      * The array of line segments, of type LineSegment .
      */
-    public LineSegment[] segments() {
-        
-    }
+    //public LineSegment[] segments() {
+    //    
+    //}
     
     /**
      * @param args . The name of an input file.
@@ -54,7 +55,7 @@ public class BruteCollinearPoints {
         Arrays.sort(arr);
         StdDraw.show(0);
 
-        //Stopwatch timer = new Stopwatch();  // start timer
+        Stopwatch timer = new Stopwatch();  // start timer
 
 
         for (int i = 0; i < N - 3; i++) {
@@ -81,7 +82,7 @@ public class BruteCollinearPoints {
                 }
             }
         }
-        //StdOut.println(timer.elapsedTime()); // stop and print timer
+        StdOut.println(timer.elapsedTime()); // stop and print timer
         in.close();
     }
 }

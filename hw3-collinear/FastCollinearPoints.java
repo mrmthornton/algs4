@@ -2,6 +2,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.Stopwatch;
 
 import java.util.Arrays;
 
@@ -12,6 +13,7 @@ public class FastCollinearPoints {
     private int numberOfSegments;
     
     public FastCollinearPoints() { }
+    //public FastCollinearPoints(Point [], points) { }
     
     private FastCollinearPoints(int N) {
         lines = new Point[N * (N - 1) / POINTS_IN_LINE][2];
@@ -49,59 +51,86 @@ public class FastCollinearPoints {
      * The subsequent lines contain coordinates. For example 512 256
      * @param args . The input file.
      */
+    @SuppressWarnings("deprecation")
     public static void main(String[] args) {
         
         final int fieldSize = 32768;
-        StdDraw.setXscale(0, fieldSize);
-        StdDraw.setYscale(0, fieldSize);
-        StdDraw.show(0);
+
 
         // read in the input
         String filename = args[0];
         In in = new In(filename);
         int N = in.readInt();  // get the number of points
+        
+        // create the canvas
+        StdDraw.setXscale(0, fieldSize);
+        StdDraw.setYscale(0, fieldSize);
+        StdDraw.show(0);
 
         // create arrays for point storage and manipulation
         Point [] pointsInOrder = new Point[N];  // all the points
         Point [] arr = new Point[N]; // sorted by slope
-        Point [] line = new Point[N]; // line found
-        Fast lines = new Fast(N);
+        Point [] line = new Point[N]; // lines found
         
+        /**
+         * this will not work internally. ?
+         */
+        FastCollinearPoints lines = new FastCollinearPoints(N);
+        
+        //fill the array with unsorted input
         for (int idx = 0; idx < N; idx++) {
             pointsInOrder[idx] = new Point(in.readInt(), in.readInt());
         }
-        Arrays.sort(pointsInOrder);
+        // sort the input array
+        Arrays.sort(pointsInOrder); // **************** does this accomplish anything ?
+        
+        // draw the points on the canvas
         for (Point p : pointsInOrder) {
             p.draw();
         }
+        // display the updated canvas
         StdDraw.show(0);
+        
         for (int idx = 0; idx < N; idx++) {
             arr[idx] = pointsInOrder[idx];
         }
 
-        
+        // if there are enough input points to form a line
         if (N >= POINTS_IN_LINE) {
-            //Stopwatch timer = new Stopwatch();  // start timer
+            // start a timer
+            Stopwatch timer = new Stopwatch();  // start timer
+            // loop over all points
             for (int i = 0; i < N; i++) {
+                // on each pass, select a different point for the temporary origin
                 Point origin = pointsInOrder[i];
-                Arrays.sort(arr, origin.SLOPE_ORDER); // sort by slope
-                int j = 0;
-                int next = 0;
+                // sort the points by slope, with respect to the temporary origin
+                Arrays.sort(arr, origin.SLOPE_ORDER); 
+                // loop over all points (including the origin)
+                int j = 0; // the index of all points
+                int next = 0; // the index of same-slope points
                 while (j < N) {
-                    line[0] = origin; // start of potential line
-                    double slope = origin.slopeTo(arr[j]);  // slope from origin to next start
-                    while (j + next < N  // still more points
-                            && origin.slopeTo(arr[j + next]) == slope) {  // slopes are equal
-                        line[next + 1] = arr[j + next]; // save index
+                    // store the temporary origin as the start of potential line
+                    line[0] = origin; 
+                    // the slope from the origin the next point(which may be the origin)
+                    double slope = origin.slopeTo(arr[j]);  
+                    // loop over points with same relative slope
+                    while (j + next < N  // while there are still more points and 
+                            && origin.slopeTo(arr[j + next]) == slope) {  // the slope is the same
+                        line[next + 1] = arr[j + next]; // add the point to a potential line
                         next++;
                     }
+                    // if the line contains enought points
                     if (next >= POINTS_IN_LINE - 1) {
+                        // sort before comparing to known lines
                         Arrays.sort(line, 0, next + 1);
+                        // if the line is unique
                         if (lines.isUnique(line)) {
+                            //print all the points in the line
                             for (int n = 0; n < next; n++) { // print all points
                                 StdOut.print(line[n].toString() + " -> ");
                             }
-                            StdOut.println(line[next].toString());
+                            StdOut.println(line[next].toString() );
+                            // draw the line
                             line[0].drawTo(line[next]);
                             StdDraw.show(0);
                         }
@@ -112,7 +141,7 @@ public class FastCollinearPoints {
                     next = 0;
                 }
             }
-            //StdOut.println(timer.elapsedTime()); // stop and print timer
+            StdOut.println(timer.elapsedTime()); // stop and print timer
         }
     }
 }
