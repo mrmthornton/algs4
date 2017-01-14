@@ -20,7 +20,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * the initial and the smallest array size.
      */
-    private static final int START_SIZE = 8;
+    private static final int START_SIZE = 2; // minimum of 2
 
     /**
      * Reduce the queue by this factor.
@@ -58,13 +58,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
+    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;
         // with one element in the queue front=back
         // with an empty queue front>back
-        front = capacity / 2 + 1;
-        back = capacity / 2;
+        front = 1;
+        back = 0;
         queueLength = 0;
     }
 
@@ -164,7 +165,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         } else if (queueLength > capacity / 2) {
             growAndCenter();
         } else {
-            center(capacity);
+            leftJustify(capacity);
         }
     }
 
@@ -172,14 +173,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      *  Reduce the capacity and call the center method.
      */
     private void shrinkAndCenter() {
-        center(capacity / 2);
+        leftJustify(capacity / 2);
     }
 
     /**
      *  Increase the capacity and call the center method.
      */
     private void growAndCenter() {
-        center(capacity * 2);
+        leftJustify(capacity * 2);
     }
 
     /**
@@ -188,9 +189,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * Free's unused memory
      * @param newArraySize is the capacity of the resulting array.
      */
-    private void center(final int newArraySize) {
+    private void leftJustify(final int newArraySize) {
+        @SuppressWarnings("unchecked")
         Item[] newArray = (Item[]) new Object[newArraySize];
-        int  newFront = (newArraySize / 2) - (queueLength / 2);
+        int  newFront = 0;
         for (int i = 0; i < queueLength; i++) {
             newArray[newFront + i]  = arr[front + i];
         }
@@ -214,8 +216,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         // it was removed, so don't shift anything
         if (queueLength == 1) {
             arr[index] = null;
-            front = capacity / 2 + 1;
-            back = capacity / 2;
+            front = 1;
+            back = 0;
             queueLength = 0;
             return;
         }

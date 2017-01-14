@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.Quick;
 
 public class testQuick {
     public static void main(String[] args) {

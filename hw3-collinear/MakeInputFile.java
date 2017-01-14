@@ -22,8 +22,8 @@ public class MakeInputFile {
                 write.println(StdRandom.uniform(size) + "  " + StdRandom.uniform(size));
             }
             write.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException err) {
+            err.printStackTrace();
         }
     }
 }

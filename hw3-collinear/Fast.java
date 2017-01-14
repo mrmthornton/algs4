@@ -1,7 +1,9 @@
-import java.util.Arrays;
+
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Arrays;
 
 public class Fast {
     private static final int POINTS_IN_LINE = 4;
@@ -12,7 +14,7 @@ public class Fast {
     public Fast() { }
     
     private Fast(int N) {
-        lines = new Point[N * (N-1)/POINTS_IN_LINE][2];
+        lines = new Point[N * (N - 1) / POINTS_IN_LINE][2];
         lineIndex = 0;
     }
         
@@ -35,12 +37,18 @@ public class Fast {
         // for each line in lines compare first two points against 
         // the first two points in aNewLine.
         for (int i = 0; i < lineIndex; i++) {
-            if (lines[i][0] == newLine[0] && lines[i][1] == newLine[1]) 
+            if (lines[i][0] == newLine[0] && lines[i][1] == newLine[1]) {
                 return false;
+            }
         }
         return true;
     }
- 
+
+    /**
+     * The input file first line is the number of points.
+     * The subsequent lines contain coordinates. For example 512 256
+     * @param args . The input file.
+     */
     public static void main(String[] args) {
         
         final int fieldSize = 32768;
@@ -87,7 +95,7 @@ public class Fast {
                         line[next + 1] = arr[j + next]; // save index
                         next++;
                     }
-                    if (next >= POINTS_IN_LINE -1) {
+                    if (next >= POINTS_IN_LINE - 1) {
                         Arrays.sort(line, 0, next + 1);
                         if (lines.isUnique(line)) {
                             for (int n = 0; n < next; n++) { // print all points

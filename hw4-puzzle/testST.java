@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.ST;
 
 public class testST {
     public static void main(String[] args)

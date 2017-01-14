@@ -1,14 +1,19 @@
-import java.util.Arrays;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Arrays;
 
 public class Brute {
     private static final int POINTS_IN_LINE = 4;
     
     public Brute() {
     } 
-
+    
+    /**
+     * @param args . The name of an input file.
+     */
     public static void main(String[] args) {
         // read in the input
         String filename = args[0];

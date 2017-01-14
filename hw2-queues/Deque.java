@@ -15,7 +15,7 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * the initial and the smallest array size.
      */
-    private static final int START_SIZE = 8;
+    private static final int START_SIZE = 4; // minimum of 4
 
     /**
      * Reduce the queue by this factor.
@@ -53,6 +53,7 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * Construct an empty deque.
      */
+    @SuppressWarnings("unchecked")
     public Deque() {
         arr = (Item[]) new Object[START_SIZE];
         capacity = START_SIZE;

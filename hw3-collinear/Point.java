@@ -7,8 +7,9 @@
  * Description: An immutable data type for points in the plane.
  */
 
-import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Comparator;
 
 /**
  * Creates a tuple with two ordinates.
@@ -31,7 +32,7 @@ public class Point implements Comparable<Point> {
     /**
      * Constant negative zero.
      */
-//     private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
+    private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
     /**
      *  The x coordinate.
      */
@@ -84,28 +85,28 @@ public class Point implements Comparable<Point> {
     }
 
     /**
+     *      *  The invoking point p1 is less than the argument point p2,
+     *  if and only if either p1.y < p2.y or if p1.y = p2.y and p1.x < p2.x .
      *  @return -1, 0, 1 as the result of lexicographical comparison.
-     *  The invoking point p1 is less than the argument point p2
-     *  if and only if either p1.y < p2.y or if p1.y = p2.y and p1.x < p2.x.
      */
     public int compareTo(final Point that) {
         if (this.y < that.y 
-         || (this.y  == that.y && this.x < that.x)) {
+            || (this.y  == that.y && this.x < that.x)) {
             return -1;    //  less than
         } else if (this.y == that.y && this.x == that.x) {
             return 0;     //  equal to 
         } else {
             return 1;     //  greater than
-         }
+        }
     }
 
     /**
-     * @return slope   given by the formula (y1 − y0) / (x1 − x0).
-     *  Treat the slope of a horizontal line segment as positive zero
-     *  Treat the slope of a vertical line segment as positive infinity
+     *  Treat the slope of a horizontal line segment as positive zero .
+     *  Treat the slope of a vertical line segment as positive infinity .
      *  Treat the slope of a degenerate line segment as negative infinity. 
-     *  @param that . 'this' and 'that' are end-points forming a line,
-     *  the slope of which is determined by slopeTo().
+     *  'this' and 'that' are points forming a line, the slope is determined by slopeTo().
+     *   @param that . The foreign point in the comparison.
+     * @return slope   given by the formula (y1 − y0) / (x1 − x0).
      */
     public double slopeTo(final Point that) {
         if (that.y == this.y && that.x == this.x) {  // degenerate case
@@ -120,22 +121,21 @@ public class Point implements Comparable<Point> {
     }
 
     /**
-     * helper methods
+     * helper methods.
      */
 
     /**
-     *  inner classes
+     *  inner classes.
      */
 
     /**
-     * The SLOPE_ORDER comparator should compare points 
-     * by the slopes they make with the invoking point (x0, y0).
+     * The SLOPE_ORDER comparator compares points by slope from the invoking point (x0, y0).
      * Formally, the point (x1, y1) is less than the point (x2, y2) 
      * if and only if the slope (y1 − y0) / (x1 − x0)
      * is less than the slope (y2 − y0) / (x2 − x0).
-     *  @return -1, 0 , 1 slope to p1 <, =, > slope to p2.
      * Treat horizontal, vertical, and degenerate line segments
      * as in the slopeTo() method. 
+     *      *  @return -1, 0 , 1 slope to p1 <, =, > slope to p2.
      */
     private class  SlopeOrder implements Comparator<Point> {
 
@@ -146,12 +146,13 @@ public class Point implements Comparable<Point> {
             // slopeTo() vertical line returns POS_INF;
             // slopeTo() horizontal line returns POS_ZERO;
 
-            if (slope1 < slope2) 
-                return -1;
-            else if (slope1 == slope2)
-                return 0;
-            else 
+            if (slope1 < slope2) {
+                return -1; 
+            } else if (slope1 == slope2) {
+                return 0; 
+            } else {
                 return 1;
+            }
         }
 
         @Override
@@ -159,5 +160,5 @@ public class Point implements Comparable<Point> {
             String msg = "Not Implemented. Do NOT use this method.";
             throw new java.lang.UnsupportedOperationException(msg);            
         }
-    };
+    }
 }
