@@ -5,23 +5,23 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Arrays;
 
-public class Fast {
+public class FastCollinearPoints {
     private static final int POINTS_IN_LINE = 4;
 
     private Point [][] lines;
-    private int lineIndex;
+    private int numberOfSegments;
     
-    public Fast() { }
+    public FastCollinearPoints() { }
     
-    private Fast(int N) {
+    private FastCollinearPoints(int N) {
         lines = new Point[N * (N - 1) / POINTS_IN_LINE][2];
-        lineIndex = 0;
+        numberOfSegments = 0;
     }
         
     private boolean isUnique(Point[] newLine) {
-        if (lineIndex == 0 || isNotDuplicate(newLine)) {
+        if (numberOfSegments == 0 || isNotDuplicate(newLine)) {
             saveLine(newLine);
-            lineIndex++;
+            numberOfSegments++;
             return true;
         }
         return false;
@@ -29,14 +29,14 @@ public class Fast {
 
     private void saveLine(Point[] newLine) {
         for (int i = 0; i <= 1; i++) {
-            lines[lineIndex][i] = newLine[i];
+            lines[numberOfSegments][i] = newLine[i];
         }
     }
         
     private boolean isNotDuplicate(Point[] newLine) {
         // for each line in lines compare first two points against 
         // the first two points in aNewLine.
-        for (int i = 0; i < lineIndex; i++) {
+        for (int i = 0; i < numberOfSegments; i++) {
             if (lines[i][0] == newLine[0] && lines[i][1] == newLine[1]) {
                 return false;
             }

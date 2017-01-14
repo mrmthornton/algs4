@@ -5,11 +5,30 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Arrays;
 
-public class Brute {
+public class BruteCollinearPoints {
     private static final int POINTS_IN_LINE = 4;
     
-    public Brute() {
+    /**
+     * Find all line segments containing 4 or more points.
+     * @param points . An array containing type Point .
+     */
+    public BruteCollinearPoints(Point[] points) {
     } 
+
+    /**
+     * The number of line segments found in the input.
+     * returns the number of line segments found.
+     */
+    public int numberOfSegments() {
+        
+    }
+    
+    /**
+     * The array of line segments, of type LineSegment .
+     */
+    public LineSegment[] segments() {
+        
+    }
     
     /**
      * @param args . The name of an input file.
