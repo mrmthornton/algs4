@@ -3,11 +3,7 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
     private static final int POINTS_IN_LINE = 4;
-    /**
-     * Constant negative infinity.
-     */
-    private static final double NEG_INF = Double.NEGATIVE_INFINITY;
-    
+     
     private int N;
     private Point [] pointsInOrder;  // all the points, sorted
     private Point [] arr; // sorted by slope
@@ -30,33 +26,44 @@ public class FastCollinearPoints {
         // make a copy of the input array
         pointsInOrder = Arrays.copyOf(points, N);
         // sort the local copy
-        Arrays.sort(pointsInOrder); // **************** does this accomplish anything ?
+        Arrays.sort(pointsInOrder);
         
+        // check for duplicate points
+        for (int i=0; i<N-1; i++) {
+            Point p = pointsInOrder[i];
+            Point q = pointsInOrder[i+1];
+            if (p.compareTo(q)==0) {
+                throw new IllegalArgumentException(); // found the same point twice
+            }
+        }
+                
         // make a copy of the points which will be repeatedly sorted by slope
         arr = Arrays.copyOf(pointsInOrder, N);
 
         // if there are enough input points to form a line
         if (N >= POINTS_IN_LINE) {
-            // loop over all points
+            // LOOP OVER ALL POINTS in sorted by Point
             for (int i = 0; i < N; i++) {
                 // on each pass, select a different point for the temporary origin
                 Point origin = pointsInOrder[i];
                 // sort the points by slope, with respect to the temporary origin
                 // Arrays.sort(arr, origin.SLOPE_ORDER); 
                 Arrays.sort(arr, origin.slopeOrder()); 
-                // loop over all points (including the origin)
+                
+                // LOOP OVER ALL POINTS in sorted by slope (including the origin)
                 int j = 0; // the index of all points
                 int next = 0; // the index of same-slope points
                 while (j < N) {
                     // store the temporary origin as the start of potential line
                     line[0] = origin; 
                     // the slope from the origin the next point(which may be the origin)
-                    double slope = origin.slopeTo(arr[j]);  
-                    // loop over points with same relative slope
-                    while (j + next < N  // while there are still more points and 
-                            && origin.slopeTo(arr[j + next]) == slope // the slope is the same
-                            && slope != NEG_INF) {  // it is not the degerative case (same point)
-                        line[next + 1] = arr[j + next]; // add the point to a potential line
+                    double slope = origin.slopeTo(arr[j]);
+                                        
+                    // while there is still another point with the same slope,
+                    // add the point to the potential line segment,
+                    // and increment the same-slope index (next)
+                    while (j + next < N && origin.slopeTo(arr[j + next]) == slope) { 
+                        line[next + 1] = arr[j + next]; 
                         next++;
                     }
                     // if the line contains enought points

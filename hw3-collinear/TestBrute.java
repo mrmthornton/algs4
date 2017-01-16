@@ -15,17 +15,20 @@ public class TestBrute {
         int N = in.readInt();
         Point [] arr = new Point[N];
     
-        for (int i = 0; i < N; i++) {
-            arr[i] = new Point(in.readInt(), in.readInt());
-            arr[i].draw();
-        }
-        in.close();
-        
         final int fieldSize = 32768;
         StdDraw.setXscale(0, fieldSize);
         StdDraw.setYscale(0, fieldSize);
         StdDraw.show();
         
+        for (int i = 0; i < N; i++) {
+            // fill the array with input points
+            arr[i] = new Point(in.readInt(), in.readInt());
+            // draw the points on the canvas
+            arr[i].draw();
+        }
+        in.close();
+        StdDraw.show();     
+
         Arrays.sort(arr);
         
         Stopwatch timer = new Stopwatch();  // start timer

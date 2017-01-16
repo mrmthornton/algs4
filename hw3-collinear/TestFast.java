@@ -12,7 +12,6 @@ public class TestFast {
      * The subsequent lines contain coordinates. For example 512 256
      * @param args . The input file.
      */
-    @SuppressWarnings("deprecation")
     public static void main(String[] args) {
         
         final int fieldSize = 32768;
@@ -25,7 +24,7 @@ public class TestFast {
         // create the canvas
         StdDraw.setXscale(0, fieldSize);
         StdDraw.setYscale(0, fieldSize);
-        StdDraw.show(0);
+        StdDraw.show();
 
         // create arrays for point storage and manipulation
         Point [] pointsFromInput = new Point[N];  // all the points
@@ -39,9 +38,8 @@ public class TestFast {
         for (Point p : pointsFromInput) {
             p.draw();
         }
-        
         // display the updated canvas
-        StdDraw.show(0);
+        StdDraw.show();
         
         // start a timer
         Stopwatch timer = new Stopwatch();  // start timer
@@ -62,7 +60,7 @@ public class TestFast {
             StdOut.println(l.toString());
             // draw all the line segments
             l.draw();
-            StdDraw.show(0);
+            StdDraw.show();
         }
         StdOut.println();
         in.close();

@@ -4,11 +4,6 @@ import java.util.Arrays;
 public class BruteCollinearPoints {
     private static final int POINTS_IN_LINE = 4;
 
-    /**
-     * Constant negative infinity.
-     */
-    private static final double NEG_INF = Double.NEGATIVE_INFINITY;
-    
     private int N;
     private Point [] arr; // sorted by slope
     private Point [] line; // holds Points as the line is being formed
@@ -32,10 +27,16 @@ public class BruteCollinearPoints {
         //for (int i = 0; i < N; i++) {
         //    arr[i] = points[i];
         //}
-        Arrays.sort(arr); // **************** does this accomplish anything ?
-        // for(Point p : arr) {               // for debug
-        //     StdOut.println(p.toString());  // for debug
-        // }                                  // for debug
+        Arrays.sort(arr); 
+        
+        // check for duplicate points
+        for (int i=0; i<N-1; i++) {
+            Point p = arr[i];
+            Point q = arr[i+1];
+            if (p.compareTo(q)==0) {
+                throw new IllegalArgumentException(); // found the same point twice
+            }
+        }
         
         // find all of the lines, with collinear points numbering at least "POINTS_IN_LINE". 
         for (int i = 0; i < N - 3; i++) {
@@ -45,20 +46,13 @@ public class BruteCollinearPoints {
                         double s1 = arr[i].slopeTo(arr[j]);
                         double s2 = arr[i].slopeTo(arr[k]);
                         double s3 = arr[i].slopeTo(arr[m]);
-                        if (s1 == s2 && s1 == s3 && s1 != NEG_INF) {
+                        if (s1 == s2 && s1 == s3) {
                             line[0] = arr[i];
                             line[1] = arr[j];
                             line[2] = arr[k];
                             line[3] = arr[m];
                             lineSegments[numberOfSegments] = new LineSegment(line[0], line[3]);
                             numberOfSegments++;
-                            // Arrays.sort(line); // for debug only
-                            // StdOut.print(line[0].toString() + " -> "); // for debug only
-                            // StdOut.print(line[1].toString() + " -> "); // for debug only
-                            // StdOut.print(line[2].toString() + " -> "); // for debug only
-                            // StdOut.println(line[3].toString()); // for debug only
-                            // line[0].drawTo(line[3]); // for debug only
-                            // StdDraw.show(0); // for debug only
                         }
                     }
                 }

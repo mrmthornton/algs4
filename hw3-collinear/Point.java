@@ -85,14 +85,31 @@ public class Point implements Comparable<Point> {
      *  @return -1, 0, 1 as the result of lexicographical comparison.
      */
     public int compareTo(final Point that) {
-        if (this.y < that.y 
-            || (this.y  == that.y && this.x < that.x)) {
-            return -1;    //  less than
-        } else if (this.y == that.y && this.x == that.x) {
-            return 0;     //  equal to 
+        if (this.y > that.y) {
+            return 1;      //  greater than 
         } else {
-            return 1;     //  greater than
-        }
+            if (this.y < that.y) {
+                return -1; //  less than
+            } else {
+                if (this.x > that.x) {
+                    return 1; // greater than 
+                } else {
+                    if (this.x < that.x) {
+                        return -1; // less than
+                    } else {
+                        return 0; // equal to  
+                    }
+                }
+            }
+        } 
+        //if (this.y < that.y 
+        //    || (this.y  == that.y && this.x < that.x)) {
+        //    return -1;    //  less than
+        //} else if (this.y == that.y && this.x == that.x) {
+        //    return 0;     //  equal to 
+        //} else {
+        //    return 1;     //  greater than
+        //}
     }
 
     /**
@@ -104,15 +121,28 @@ public class Point implements Comparable<Point> {
      * @return slope   given by the formula (y1 − y0) / (x1 − x0).
      */
     public double slopeTo(final Point that) {
-        if (that.y == this.y && that.x == this.x) {  // degenerate case
-            return NEG_INF;
-        } else if (that.x == this.x) { // vertical line
-            return POS_INF;
-        } else if (that.y == this.y) {  // horizontal line
-            return POS_ZERO;
+        if (that.y == this.y) {
+            if (that.x == this.x) {
+                return NEG_INF;   // degenerate case
+            } else {
+                return POS_ZERO;  // horizontal line
+            }
         } else {
-            return (double) (that.y - this.y) / (that.x - this.x);
+            if (that.x == this.x) {
+                return POS_INF;   // vertical line
+            } else {
+                return (double) (that.y - this.y) / (that.x - this.x);  // ordinary line
+            }
         }
+        //if (that.y == this.y && that.x == this.x) {  // degenerate case
+        //    return NEG_INF;
+        //} else if (that.x == this.x) { // vertical line
+        //    return POS_INF;
+        //} else if (that.y == this.y) {  // horizontal line
+        //    return POS_ZERO;
+        //} else {
+        //    return (double) (that.y - this.y) / (that.x - this.x);
+        //}
     }
 
     public Comparator<Point> slopeOrder() {
