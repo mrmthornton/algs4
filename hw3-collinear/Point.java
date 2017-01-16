@@ -102,15 +102,7 @@ public class Point implements Comparable<Point> {
                 }
             }
         } 
-        //if (this.y < that.y 
-        //    || (this.y  == that.y && this.x < that.x)) {
-        //    return -1;    //  less than
-        //} else if (this.y == that.y && this.x == that.x) {
-        //    return 0;     //  equal to 
-        //} else {
-        //    return 1;     //  greater than
-        //}
-    }
+     }
 
     /**
      *  Treat the slope of a horizontal line segment as positive zero .
@@ -134,15 +126,6 @@ public class Point implements Comparable<Point> {
                 return (double) (that.y - this.y) / (that.x - this.x);  // ordinary line
             }
         }
-        //if (that.y == this.y && that.x == this.x) {  // degenerate case
-        //    return NEG_INF;
-        //} else if (that.x == this.x) { // vertical line
-        //    return POS_INF;
-        //} else if (that.y == this.y) {  // horizontal line
-        //    return POS_ZERO;
-        //} else {
-        //    return (double) (that.y - this.y) / (that.x - this.x);
-        //}
     }
 
     public Comparator<Point> slopeOrder() {

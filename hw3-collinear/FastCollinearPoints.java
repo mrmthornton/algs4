@@ -116,7 +116,7 @@ public class FastCollinearPoints {
     private boolean isDuplicate(Point start, Point end) {
         // for each line in lines compare against newline
         for (int i = 0; i < numberOfSegments; i++) {
-            if (lines[i][0] == start && lines[i][1] == end) {
+            if (start.compareTo(lines[i][0])==0 && end.compareTo(lines[i][1]) == 0) {
                 return true;
             }
         }
