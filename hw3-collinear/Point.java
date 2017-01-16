@@ -43,11 +43,6 @@ public class Point implements Comparable<Point> {
     private final int y;
 
     /**
-     *  compare points by slope.
-     */
-    public final Comparator<Point> SLOPE_ORDER = new SlopeOrder();
-
-    /**
      * create the point (x, y).
      * @param xComponent  The x coordinate of the new point.
      * @param yComponent  The y coordinate of the new point.
@@ -120,10 +115,10 @@ public class Point implements Comparable<Point> {
         }
     }
 
-    /**
-     * helper methods.
-     */
-
+    public Comparator<Point> slopeOrder() {
+        return new SlopeOrder();
+    }
+    
     /**
      *  inner classes.
      */

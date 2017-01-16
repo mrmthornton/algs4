@@ -13,12 +13,14 @@ public class FastCollinearPoints {
     private Point [] pointsInOrder;  // all the points, sorted
     private Point [] arr; // sorted by slope
     private Point [] line; // holds Points as the line is being formed
-    private LineSegment[] lines; // the found lines(segments)
+    private Point [][] lines; // the found lines(points)
+    private LineSegment[] lineSegments; // the found lines(segments)
     private int numberOfSegments;
     
     public FastCollinearPoints(Point [] points) { 
         N = points.length; 
-        lines = new LineSegment[N * (N - 1) / POINTS_IN_LINE];
+        lines = new Point[N * (N - 1) / POINTS_IN_LINE][2];
+        lineSegments = new LineSegment[N * (N - 1) / POINTS_IN_LINE];
         numberOfSegments = 0;
         
         // create arrays for point storage and manipulation
@@ -41,7 +43,8 @@ public class FastCollinearPoints {
                 // on each pass, select a different point for the temporary origin
                 Point origin = pointsInOrder[i];
                 // sort the points by slope, with respect to the temporary origin
-                Arrays.sort(arr, origin.SLOPE_ORDER); 
+                //Arrays.sort(arr, origin.SLOPE_ORDER); 
+                Arrays.sort(arr, origin.slopeOrder()); 
                 // loop over all points (including the origin)
                 int j = 0; // the index of all points
                 int next = 0; // the index of same-slope points
@@ -60,16 +63,14 @@ public class FastCollinearPoints {
                     if (next >= POINTS_IN_LINE - 1) {
                         // sort before comparing to known lines
                         Arrays.sort(line, 0, next + 1);
-                        LineSegment lineSeg = new LineSegment(line[0], line[next]);
                         // if the line is unique
-                        if (isUnique(lineSeg)) {
-                            // add line to lines
-                            saveLine(lineSeg);
+                        if (isUnique(line[0], line[next])) {
+                            // add the new line to lines and lineSegments
+                            saveLine(line[0], line[next]);
+                            // increment the number of found line segments
+                            numberOfSegments++;
                             //print all the points in the line
-                            for (int n = 0; n < next; n++) { // print all points
-                                StdOut.print(line[n].toString() + " -> ");
-                            }
-                            StdOut.println(line[next].toString() );
+                            //StdOut.println(line[0].toString() + " -> " + line[next].toString());
                         }
                         // skip any points included in the line and continue the loop
                         j = j + next;
@@ -88,33 +89,36 @@ public class FastCollinearPoints {
     }
     
     public LineSegment [] segments() {
-        return lines;
+        return lineSegments;
     }
     
     // if a line is found to be unique, it is added to the array lines
-    private boolean isUnique(LineSegment newLine) {
-        if (numberOfSegments == 0 || isNotDuplicate(newLine)) {
-            saveLine(newLine);
-            numberOfSegments++;
+    private boolean isUnique(Point start, Point end) {
+        if (numberOfSegments == 0 || !isDuplicate(start, end)) {
             return true;
         }
         return false;
     }
 
-    private void saveLine(LineSegment newLine) {
-        lines[numberOfSegments] = newLine;
+    private void saveLine(Point start, Point end) {
+        lines[numberOfSegments][0] = start;
+        lines[numberOfSegments][1] = end;
+        lineSegments[numberOfSegments] = new LineSegment(start, end);
     }
         
-    private boolean isNotDuplicate(LineSegment newLine) {
+    private boolean isDuplicate(Point start, Point end) {
         // for each line in lines compare against newline
         for (int i = 0; i < numberOfSegments; i++) {
-            if (lines[i] == newLine) {
-                return false;
+            if (lines[i][0] == start && lines[i][1] == end) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
+    
+    
+    
     /**
      * The input file first line is the number of points.
      * The subsequent lines contain coordinates. For example 512 256
@@ -124,7 +128,6 @@ public class FastCollinearPoints {
     public static void main(String[] args) {
         
         final int fieldSize = 32768;
-
 
         // read in the input
         String filename = args[0];
@@ -161,12 +164,19 @@ public class FastCollinearPoints {
         // stop and print timer
         StdOut.println(timer.elapsedTime());
         
-        //print all the points in the line
-        for (LineSegment l: fast.segments()) { 
-            StdOut.print(l.toString() + " -> ");
+        // print the number of line segments 
+        StdOut.println(fast.numberOfSegments);
+        
+        // loop over all segments
+        for (LineSegment l: fast.segments()) {
+            if (l == null) { break; }
+            // print the line endpoints
+            StdOut.println(l.toString());
+            // draw all the line segments
             l.draw();
             StdDraw.show(0);
         }
         StdOut.println();
+        in.close();
     }
 }
