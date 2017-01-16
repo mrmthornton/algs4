@@ -3,7 +3,7 @@ algs4
 
 Coursera - Princeton "Algorithms" course work
 
-This repository contains homework for course. 
+This repository contains homework for the course. 
 The repository is to facilitate work from multiple locations,
 NOT to share homework solutions.
 
