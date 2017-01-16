@@ -4,8 +4,6 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Stopwatch;
 
-import java.util.Arrays;
-
 public class TestFast {
 
     
@@ -55,7 +53,7 @@ public class TestFast {
         StdOut.println(timer.elapsedTime());
         
         // print the number of line segments 
-        StdOut.println(fast.numberOfSegments());
+        StdOut.println(fast.numberOfSegments() );
         
         // loop over all segments
         for (LineSegment l: fast.segments()) {

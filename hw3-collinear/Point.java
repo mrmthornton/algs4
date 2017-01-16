@@ -32,7 +32,7 @@ public class Point implements Comparable<Point> {
     /**
      * Constant negative zero.
      */
-    private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
+    // private static final double NEG_ZERO = (1.0 - 1.0) / -1.0;  //   -0.0
     /**
      *  The x coordinate.
      */
@@ -59,7 +59,7 @@ public class Point implements Comparable<Point> {
     public void draw() {
         /* DO NOT MODIFY */
         StdDraw.point(x, y);
-        //StdDraw.circle(x, y, 10.0);
+        // StdDraw.circle(x, y, 10.0);
     }
 
     /**
