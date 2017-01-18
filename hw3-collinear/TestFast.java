@@ -12,7 +12,7 @@ public class TestFast {
      * The subsequent lines contain coordinates. For example 512 256
      * @param args . The input file.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
         
         final int fieldSize = 32768;
 
