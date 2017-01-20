@@ -1,9 +1,17 @@
 
-public class testBoard {
+public class TestBoard {
+    /**
+     * @param args , no arguments are expected.
+     */
     public static void main(String[] args) {
+        int [][] arg = {{1,2},
+                        {3,0}};        
+        Board test2x2 = new Board(arg);
+        System.out.println(test2x2.manhattan());
+        
         int [][] arr = {{1,2,3},
-                {4,0,5},
-                {6,7,8}};
+                        {4,0,5},
+                        {6,7,8}};
 
         Board testBed = new Board(arr);
         System.out.println(testBed.toString());
@@ -20,8 +28,8 @@ public class testBoard {
         System.out.println(testBed.isGoal());
 
         int[][] goalArr = {{1,2,3},
-                {4,5,6},
-                {7,8,0}};
+                           {4,5,6},
+                           {7,8,0}};
         Board goal = new Board(goalArr);
         System.out.println(goal.dimension());
         System.out.println(goal.hamming());
@@ -29,8 +37,8 @@ public class testBoard {
         System.out.println(goal.isGoal());
 
         int[][] twinTest = {{0,3,1},
-                {2,5,4},
-                {8,6,7}};
+                            {2,5,4},
+                            {8,6,7}};
         Board twinboard = new Board(twinTest);
         System.out.println(twinboard.toString());
         System.out.println(twinboard.twin().toString());

@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.Stack;
 
 public class Board {
     private int [][] tiles;
-    private int [][] goalPos; //TODO make char[N * N + 1][2] for goal pos
     private int N;
 
     /**
@@ -20,14 +19,6 @@ public class Board {
             for (int j = 0; j < N; j++) {
                 assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
                 this.tiles[i][j] = tiles[i][j];
-            }
-        }
-        // setup array for goal positions
-        goalPos = new int[N * N + 1][2];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                goalPos[linearIndex(i, j)][0] = i;
-                goalPos[linearIndex(i, j)][1] = j;
             }
         }
     }
@@ -64,8 +55,11 @@ public class Board {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (tiles[i][j] != 0) {
-                    int deltaI = (int) goalPos[tiles[i][j]][0] - i;
-                    int deltaJ = (int) goalPos[tiles[i][j]][1] - j;
+                    int ldx = tiles[i][j];
+                    int calcJ = (ldx - 1) % N;
+                    int calcI = (ldx - calcJ - 1) / N;
+                    int deltaI = calcI - i;
+                    int deltaJ = calcJ - j;
                     deltaSum +=  Math.abs(deltaI) + Math.abs(deltaJ);
                 }
             }
@@ -180,7 +174,7 @@ public class Board {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                int val = (int)tiles[i][j];
+                int val = tiles[i][j];
                 s.append(String.format("%2d ", val));
             }
             s.append("\n");

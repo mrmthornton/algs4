@@ -1,3 +1,3 @@
 algs4
 =====
-8puzzle grade xx%
+8puzzle grade 97%

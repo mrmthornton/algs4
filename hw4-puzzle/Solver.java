@@ -2,6 +2,7 @@
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 
+import java.lang.NullPointerException;
 import java.util.Comparator;
 
 public class Solver {
@@ -13,9 +14,13 @@ public class Solver {
     
     /**
      * Find a solution to the initial board (using the A* algorithm) .
-     * @param initial , a board with the initial configuration.
+     * @param initial , the starting board layout.
      */
     public Solver(Board initial) {
+        if (initial == null) {
+            String msg = "Solver.java: expecting type 'Board' got 'null' ";
+            throw new NullPointerException(msg);
+        }
         Board twin = initial.twin();
         minpq.insert(new Node(initial, 0, null));
         twinpq.insert(new Node(twin, 0, null));
@@ -74,16 +79,14 @@ public class Solver {
             int moves = removed.moves + 1;
             Iterable<Board> neighbors = removed.board.neighbors();
             for (Board board : neighbors) {
-                if (removed.previous == null
-                         || board.equals(removed.previous.board) == false) {
+                if (removed.previous == null || board.equals(removed.previous.board) == false) {
                     minpq.insert(new Node(board, moves, removed));
                 }
             }
             // and twin
             neighbors = removedTwin.board.neighbors();
             for (Board board : neighbors) {
-                if (removedTwin.previous == null
-                        || board.equals(removedTwin.previous.board) == false) {
+                if (removedTwin.previous == null || board.equals(removedTwin.previous.board) == false) {
                     twinpq.insert(new Node(board, moves, removedTwin));
                 }
             }
