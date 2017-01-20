@@ -1,8 +1,8 @@
 import edu.princeton.cs.algs4.Stack;
 
 public class Board {
-    private char [][] tiles;
-    private char [][] goalPos; //TODO make char[N * N + 1][2] for goal pos
+    private int [][] tiles;
+    private int [][] goalPos; //TODO make char[N * N + 1][2] for goal pos
     private int N;
 
     /**
@@ -15,50 +15,23 @@ public class Board {
             String msg = "This array is not NxN";
             throw new UnsupportedOperationException(msg);
         }
-        this.tiles = new char[N][N];
+        this.tiles = new int[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
-                this.tiles[i][j] = (char)tiles[i][j];
+                this.tiles[i][j] = tiles[i][j];
             }
         }
         // setup array for goal positions
-        goalPos = new char[N * N + 1][2];
+        goalPos = new int[N * N + 1][2];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                goalPos[linearIndex(i, j)][0] = (char) i;
-                goalPos[linearIndex(i, j)][1] = (char) j;
+                goalPos[linearIndex(i, j)][0] = i;
+                goalPos[linearIndex(i, j)][1] = j;
             }
         }
     }
     
-    /**
-     * Construct a board from an NxN array of tiles.
-     * @param tiles , array of char values
-     */
-    private Board(char[][] tiles) {
-        N =  tiles.length;
-        if (N != tiles[0].length) { //  check for square matrix
-            String msg = "This array is not NxN";
-            throw new UnsupportedOperationException(msg);
-        }
-        this.tiles = new char[N][N];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                assert tiles[i][j] < N * N  && tiles[i][j] >= 0;
-                this.tiles[i][j] = (char)tiles[i][j];
-            }
-        }
-        // setup array for goal positions
-        goalPos = new char[N * N + 1][2];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                goalPos[linearIndex(i, j)][0] = (char) i;
-                goalPos[linearIndex(i, j)][1] = (char) j;
-            }
-        }
-    }
-   
     /**
      * @return N , the board dimension.
      */
@@ -265,7 +238,7 @@ public class Board {
     }
      
     private void swap(Board brd, int i1, int j1, int i2, int j2) {
-        char temp = brd.tiles[i1][j1];
+        int temp = brd.tiles[i1][j1];
         brd.tiles[i1][j1] = brd.tiles[i2][j2];
         brd.tiles[i2][j2] = temp;
     }
